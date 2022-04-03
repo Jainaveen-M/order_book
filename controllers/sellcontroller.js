@@ -13,6 +13,20 @@ const addsellOrder = async(req,res)=>{
     try{
         //const buy = await Buy.create(data)
 
+        // await Buy.findOne({where : {price:req.body.price}}).then(async (buy)=>{
+        //     if(buy == null){
+        //         await Buy.create(data)
+        //     }
+        //     else{
+        //         var prevQty = await Buy.findOne({where : {price:req.body.price}});
+        //         console.log(prevQty)
+        //         Buy.find({where : {price:req.body.price}}).on('success',(buy)=>{
+        //             if(buy){
+        //                 buy.update({qty: prevQty+req.body.qty});
+        //             }
+        //         })
+        //     }
+        // })
     }
     catch(e){
         console.log(e);

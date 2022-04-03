@@ -17,18 +17,6 @@ router.post('/insert',buyorderController.insertPosition)
 router.get('/home',(req,res)=>{
     const p = path.join(process.cwd()+"/public/index.html")
     res.sendFile(p)
-
-    // response.writeHead(200, {'Content-Type': 'text/html'});
-    // fs.readFile(p, null, function(error, data) {
-    //     if (error) {
-    //         response.writeHead(404);
-    //         response.write('File not found');
-    //     } else {
-    //         response.write(data);
-    //     }
-    //     response.end();
-    // });
-
 })
 
 
