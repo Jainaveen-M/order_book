@@ -1,0 +1,43 @@
+body{
+    background-color: black;
+}
+
+table, th, td {
+    border: 2px dotted white;
+    border-collapse: collapse;
+}
+
+.header{
+    color: white;
+    padding: 10% 10%;
+    margin-left: 10%;
+}
+
+#buyorder{
+    min-width: 75%;
+}
+
+#sellorder{
+    min-width: 75%;
+}
+
+h2{
+    color: aliceblue;
+}
+
+label{
+    color: white;
+    margin: 10px;
+}
+
+input{
+    margin: 10px;
+}
+
+td{
+    color: aliceblue;
+}
+
+.list{
+    margin: 50px
+}
