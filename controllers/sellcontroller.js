@@ -82,7 +82,7 @@ const insertPosition =async (req,res)=>{
     }
     console.log("===Price === ",p);
     console.log("p.indexOf(req.body.price)",p.indexOf(req.body.price));
-   if(p.indexOf(req.body.price)==-1){
+    if(p.indexOf(req.body.price)==-1){
     for(var i=0;i<s.length;i++){
         console.log("=== after price === ",s[i]);
     }

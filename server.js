@@ -49,6 +49,14 @@ socketIO.on('connection',  (client)=> {
   })
 
 
+  //listens for new messages coming in
+  client.on('refresh',  (data) =>{
+    console.log("refresh",data);
+    socketIO.emit('refresh', data);
+  })
+
+
+
 
 //listens when a user is disconnected from the server
   client.on('disconnect',  () =>{
