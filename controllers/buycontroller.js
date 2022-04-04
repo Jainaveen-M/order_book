@@ -11,9 +11,9 @@ const addBuyOrder = async(req,res)=>{
         price:req.body.price,
         total_price:req.body.price
     }
+
     try{
-        // await Buy.create(data)
-        await insertBuyOrderPosition(data)
+         await insertBuyOrderPosition(data)
     }
     catch(e){
         console.log(e);
@@ -25,45 +25,37 @@ const addBuyOrder = async(req,res)=>{
 
 
 const getAllBuyOrder = async (req, res) => {
-
-    // let buy = await Buy.findAll({})
-    // res.status(200).send(buy)
-    // orderProcessor()
     let buy = await Buy.findAll({
         order: [
-            ['price', 'ASC'],
+            ['price', 'asc'],
         ]
     })
     b =[]
     for (var i = 0; i < buy.length && i<20; i++){
         b.push(buy[i]['dataValues'])
     }
-    // b.sort(GetSortOrder("price"))
-    //console.log(b);
-    // console.log("======= index of the new element ======",buy.findIndex(obj => obj['price']==84))
-
     res.status(200).send(b)
 
 }
 
-const orderProcessor = async(req,res)=>{
-    let buy = await Buy.findAll({order: [,
-        ['price', 'ASC'],
-    ]})
-    b =[]
-    for (var i = 0; i < buy.length && i<20; i++){
-        b.push(buy[i]['dataValues'])
-    }
-    b.sort(GetSortOrder("price"))
-    // console.log("======= index of the new element ======",b.findIndex(obj => obj['price']==84));
-    console.log(b);
-}
+// const orderProcessor = async(req,res)=>{
+//     let buy = await Buy.findAll({order: [,
+//         ['price', 'asc'],
+//     ]})
+//     b =[]
+//     for (var i = 0; i < buy.length && i<20; i++){
+//         b.push(buy[i]['dataValues'])
+//     }
+//     b.sort(GetSortOrder("price"))
+//     // console.log("======= index of the new element ======",b.findIndex(obj => obj['price']==84));
+//     console.log(b);
+// }
 
 
 const insertPosition =async (req,res)=>{
     let buy = await Buy.findAll({
         order: [
-            ['price', 'DESC'],
+            ['price', 'desc'],
         ]
     })
     // TODO: to find the prev min and find the index and add it to the row
@@ -72,19 +64,31 @@ const insertPosition =async (req,res)=>{
         b.push(buy[i]['dataValues'])
         
     }
-    for (var i = 0; i < buy.length && i<20; i++){
-        b.push("=== before price == ",b[i].price)
-        
+    p =[];
+    for(var i=0;i<b.length;i++){
+        p.push(b[i].price)
+    }
+   if(p.indexOf(req.body.price)==-1){
+    for(var i=0;i<b.length;i++){
+        console.log("=== after price === ",b[i]);
     }
     b.splice(locationOf(req.body.price, b) + 1, 0, req.body.price);
     for(var i=0;i<b.length;i++){
-        console.log("==price == ",b[i].price);
+        console.log("=== after price === ",b[i]);
     }
     console.log("After ",b);
     console.log("======= index of the new element ======  ",b.indexOf(req.body.price))
     data = {
-        "insert_position":b.indexOf(req.body.price)
+        "insert_position":b.indexOf(req.body.price),
+        "status":0
     }
+   }
+   else{
+    data = {
+        "insert_position":b.indexOf(req.body.price),
+        "status":1
+    }
+   }
     res.send(data)
 }
 
@@ -125,21 +129,6 @@ const insertBuyOrderPosition = async (data)=>{
     });
 } 
 
-
-// const updateBuyOrder = async () =>{
-//     let buy = await Buy.findAll({
-//         order: [
-//             ['price', 'DESC'],
-//         ]
-//     })
-//     var insertPos = buy.findIndex(obj => obj['price']==req.body.price)
-//     data = {
-//         "insert_position":insertPos
-//     }
-//     res.send(data)
-// }
-
-
 function GetSortOrder(prop) {    
     return function(a, b) {    
         if (a[prop] > b[prop]) {    
@@ -156,7 +145,7 @@ function GetSortOrder(prop) {
 module.exports = {
     addBuyOrder,
     getAllBuyOrder,
-    orderProcessor,
+    //orderProcessor,
     insertPosition
    // updateBuyOrder
 }

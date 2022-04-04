@@ -10,8 +10,10 @@ app.get('/',(req,res)=>{
     res.send("socket connected successfully...")
 })
 // routers
-const router = require('./routes/buyorderRouter.js')
-app.use('/api/buyorder', router)
+const buyrouter = require('./routes/buyorderRouter.js')
+app.use('/api/buyorder', buyrouter)
+const sellrouter = require('./routes/sellorderRouter.js')
+app.use('/api/sellorder', sellrouter)
 
 //port
 

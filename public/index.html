@@ -135,12 +135,13 @@
 
              function onFormSubmit(){
               var result = readform()
-              socket.emit("message",insertNewRecord(result))
+              //socket.emit("message",insertNewRecord(result))
+              socket.emit("message",insertNewSellOrder(result))
               console.log(result['price'])
               console.log(result['qty'])
             }
 
-
+          
 
             function readform(){
               var data ={}
@@ -151,12 +152,21 @@
               return data
             }
 
+            // Buy order logics
 
             async function insertNewRecord(data){
                   var table = document.getElementById("buyorder").getElementsByTagName('tbody')[0];
                   var result = await getBuyOrderInsertPosition(data);
-                  console.log("insert postion ===",result["insert_position"]);
-                  var newRow = table.insertRow(result["insert_position"]-1);
+                  var insert_index = result['insert_position']
+                  if(result['status']==0){
+                    insert_index = insert_index-1
+                  }
+                  else{
+                    insert_index = insert_index-1
+                  }
+                  console.log("inser message",result)
+                  console.log("insert postion ===",insert_index);
+                  var newRow = table.insertRow(insert_index);
                   cell1 = newRow.insertCell(0);
                   cell1.innerHTML = data["price"];
                   cell2 = newRow.insertCell(1);
@@ -172,9 +182,9 @@
 
               //delete @ specific index
               function myDeleteFunction() {
-               
                 document.getElementById("buyorder").deleteRow(5);
               }
+
 
             function clearFields(){
               document.getElementById('price').value = ''
@@ -233,13 +243,6 @@
                   "qty":${data['qty']}
                   }`,
                 });
-                
-                //response.json().then(d => {
-                 // console.log("+++++ insert position +++ ",d['insert_position']+1)
-                  //var inser_pos = d['insert_position'];
-                  //console.log("==== from insert new record function  ===== ",inser_pos)
-               // });
-               //console.log(response.json());
                return response.json();
             }
 
@@ -254,8 +257,89 @@
               cell3.innerHTML = 8888 * 8888;
             }
 
+
+            // sell order logic
+            async function insertNewSellOrder(data){
+              var table = document.getElementById("sellorder").getElementsByTagName('tbody')[0];
+              var result = await getSellOrderInsertPosition(data);
+              var insert_index = result['insert_position']
+              if(result['status']==0){
+                insert_index = insert_index-1
+              }
+              else{
+                insert_index = insert_index-1
+              }
+              console.log("insert sell message",result)
+              console.log("insert sell postion ===",insert_index);
+              var newRow = table.insertRow(insert_index);
+              cell1 = newRow.insertCell(0);
+              cell1.innerHTML = data["price"];
+              cell2 = newRow.insertCell(1);
+              cell2.innerHTML = data["qty"];
+              cell3 = newRow.insertCell(2);
+              cell3.innerHTML = data["price"] * data["qty"];
+
+             await postData(data)
+             socket.emit("message",{"message":"insert sell event received"})
+             clearFields();
+             }
+
+             async function fetchSellOrderData () {
+              let response = await fetch("http://localhost:3344/api/sellorder/getsellorder");
+              let data = await response.json();
+              for (var i = 0; i < data.length; i++){
+                    var table = document.getElementById("sellorder").getElementsByTagName('tbody')[0];
+                    var newRow = table.insertRow(0);
+                    cell1 = newRow.insertCell(0);
+                    cell1.innerHTML = data[i]["price"];
+                    cell2 = newRow.insertCell(1);
+                    cell2.innerHTML = data[i]["qty"];
+                    cell3 = newRow.insertCell(2);
+                    cell3.innerHTML = data[i]["price"] * data[i]["qty"];
+              }
+              console.log(data)
+              return data;
+            }
+            
+            //function to add buy order to sql database
+
+            async function postData(data){
+              const response = await fetch("http://localhost:3344/api/sellorder/addsellorder", {
+                method: 'POST',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                body: `{
+                  "qty": ${data['qty']},
+                  "price": ${data['price']},
+                  "total_price": ${data['qty'] * data['price']}
+                  }`,
+                });
+                
+                response.json().then(data => {
+                  console.log(data);
+                });
+            }
+
+            async function getSellOrderInsertPosition(data) {
+              const response = await fetch("http://localhost:3344/api/sellorder/insert", {
+                method: 'POST',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                body: `{
+                  "price": ${data['price']},
+                  "qty":${data['qty']}
+                  }`,
+                });
+               return response.json();
+            }
+
             async function main(){
               await fetchData()
+              await fetchSellOrderData()
             }
       </script>
     </body>
