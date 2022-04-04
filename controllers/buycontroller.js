@@ -68,6 +68,8 @@ const insertPosition =async (req,res)=>{
     for(var i=0;i<b.length;i++){
         p.push(b[i].price)
     }
+    console.log("===Price === ",p);
+    console.log("p.indexOf(req.body.price)",p.indexOf(req.body.price));
    if(p.indexOf(req.body.price)==-1){
     for(var i=0;i<b.length;i++){
         console.log("=== after price === ",b[i]);
@@ -85,7 +87,7 @@ const insertPosition =async (req,res)=>{
    }
    else{
     data = {
-        "insert_position":b.indexOf(req.body.price),
+        "insert_position":p.indexOf(req.body.price),
         "status":1
     }
    }
