@@ -1,0 +1,20 @@
+ async function diffData(){
+
+            let response = await fetch("http://localhost:3344/api/buyorder/getbuyorder");
+            let data = await response.json();
+            console.log("data == ",data);
+            var table = document.getElementById("buyorder");
+           // for (let i in table.rows) {
+            for (var i=0,j=table.rows.length-1;i<table.rows.length,j>0;i++,j--) {
+                let row = table.rows[i]
+                var x = table.rows[j].cells;
+                console.log("===  column  === ",x[0].innerHTML);
+                var index = parseInt(i);
+                console.log("=== price value  === ",data[i]["price"]);
+                if(x[1].innerHTML == data[i]["price"]){
+                  if(parseInt(x[1].innerHTML)!=data[i]['qty']){
+                    socket.emit("refresh",{"message":"event receiveed for the refresh","index":i});
+                  }
+                }        
+              }
+            }

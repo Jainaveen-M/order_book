@@ -127,23 +127,20 @@
                 
              })
             
-             socket.on('buyorder', async (data) =>{
-              console.log("##### buyorder event received #######")
-              console.log(" ======= socket buyorder =======",data)
-              await processBuyOrder(data);
+             socket.on('refresh', async (data) =>{
+              console.log("##### refresh event received #######")
+              console.log(" ======= socket refresh =======",data)
+              await diffInsert(data);
+              //socket.emit("refresh",{"message":"insert event received","event":diffInsert(data)})
            })
-
-           socket.on('sellorder', async (data) =>{
-            console.log("##### sellorder event received #######")
-            console.log(" ======= socket sellorder =======",data)
-            await processSellOrder(data);
-         })
 
 
              function onFormSubmit(){
               var result = readform()
-             socket.emit("message",insertBuyOrder(result))
-             //socket.emit("message",insertSellOrder(result))
+              //socket.emit("message",insertNewRecord(result))
+             //insertNewbyDiffRecord(result)
+             socket.emit("message",insertNewbyDiffRecord(result))
+             //socket.emit("message",insertNewSellOrder(result))
               console.log(result['price'])
               console.log(result['qty'])
             }
@@ -160,24 +157,65 @@
             }
 
             // Buy order logics
-            async function insertBuyOrder(data){
-              socket.emit('buyorder',await insertBuyOrderResult(data));
+
+            async function insertNewRecord(data){
+                  var table = document.getElementById("buyorder").getElementsByTagName('tbody')[0];
+                  var result = await getBuyOrderInsertPosition(data);
+                  console.log("===== result =====",result)
+                  var insert_index = result['insert_position']
+                  if(result['status']==0){
+                    insert_index = insert_index-1
+                    console.log("inser message",result)
+                    console.log("insert postion ===",insert_index);
+                    var newRow = table.insertRow(insert_index);
+                    cell1 = newRow.insertCell(0);
+                    cell1.innerHTML = data["price"];
+                    cell2 = newRow.insertCell(1);
+                    cell2.innerHTML = data["qty"];
+                    cell3 = newRow.insertCell(2);
+                    cell3.innerHTML = data["price"] * data["qty"];
+                  }
+                  else{
+                    var prevqty = document.getElementById('buyorder').getElementsByTagName('tr')[insert_index+1].getElementsByTagName('td')[1].innerText
+                    console.log("====== prev qty ==== ",prevqty)
+                    document.getElementById("buyorder").deleteRow(insert_index+1);
+                    console.log("inserttt message",result)
+                    console.log("insert postion ===",insert_index);
+                    var newRow = table.insertRow(insert_index);
+                    cell1 = newRow.insertCell(0);
+                    cell1.innerHTML = data["price"];
+                    cell2 = newRow.insertCell(1);
+                    cell2.innerHTML = parseInt(data["qty"]) + parseInt(prevqty);
+                    cell3 = newRow.insertCell(2);
+                    cell3.innerHTML = parseInt(data["price"]) * (parseInt(data["qty"]) + parseInt(prevqty));
+                  }
+                 await postData(data)
+                 socket.emit("refresh",{"message":"insert event received"})
+                 clearFields();
+            }
+
+            async function insertNewbyDiffRecord(data){
+              var table = document.getElementById("buyorder").getElementsByTagName('tbody')[0];
+              var result = await getBuyOrderInsertPosition(data);
+              console.log("===== result =====",result)
+              var insert_index = result['insert_position']
+              socket.emit('refresh',await diff(data));
               await postData(data)
               clearFields();
         }
 
-            async function insertBuyOrderResult(data){
-            var result = await getBuyOrderInsertPosition(data);
-            let json = {
-                "insert_position":result['insert_position'],
-                "price":data.price,
-                "qty":data.qty,
-                "status":result['status']
-            }
-            return json;
-            }
+        async function diff(data){
+          var result = await getBuyOrderInsertPosition(data);
+          let json = {
+              "insert_position":result['insert_position'],
+              "price":data.price,
+              "qty":data.qty,
+              "status":result['status']
+          }
+          return json;
+        }
 
-           async function processBuyOrder(data){
+           async function diffInsert(data){
             var table = document.getElementById("buyorder").getElementsByTagName('tbody')[0];
             console.log("===== result =====",data)
             var insert_index = data['insert_position']
@@ -222,7 +260,7 @@
             
 
             // function to get from sql database
-            async function fetchBuyOrderData () {
+            async function fetchData () {
               document.getElementById("buyorder").getElementsByTagName('tbody').innerHTML=''
               let response = await fetch("http://localhost:3344/api/buyorder/getbuyorder");
               let data = await response.json();
@@ -240,6 +278,9 @@
               console.log(data)
               return data;
             }
+
+            // demo function for socket to match the order table
+
           
             //function to add buy order to sql database
 
@@ -290,29 +331,13 @@
 
 
             // sell order logic
-            async function insertSellOrder(data){
-             socket.emit("sellorder",await inserSellOrderResult(data))
-             await postSellOrderData(data)
-             clearFields();
-             }
-
-             async function inserSellOrderResult(data){
-                var result = await getSellOrderInsertPosition(data);
-                let json = {
-                    "insert_position":result['insert_position'],
-                    "price":data.price,
-                    "qty":data.qty,
-                    "status":result['status']
-                }
-                return json;
-             }
-
-             function processSellOrder(data){
-                var table = document.getElementById("sellorder").getElementsByTagName('tbody')[0];
-                var insert_index = data['insert_position']
-              if(data['status']==0){
+            async function insertNewSellOrder(data){
+              var table = document.getElementById("sellorder").getElementsByTagName('tbody')[0];
+              var result = await getSellOrderInsertPosition(data);
+              var insert_index = result['insert_position']
+              if(result['status']==0){
                 insert_index = insert_index-1
-                console.log("inser message",data)
+                console.log("inser message",result)
                 console.log("insert postion ===",insert_index);
                 var newRow = table.insertRow(insert_index);
                 cell1 = newRow.insertCell(0);
@@ -326,7 +351,7 @@
                 var prevqty = document.getElementById('sellorder').getElementsByTagName('tr')[insert_index+1].getElementsByTagName('td')[1].innerText;
                 console.log("====== prev qty ==== ",prevqty)
                 document.getElementById("sellorder").deleteRow(insert_index+1);
-                console.log("insert message",data)
+                console.log("insert message",result)
                 console.log("insert postion ===",insert_index);
                 var newRow = table.insertRow(insert_index);
                 cell1 = newRow.insertCell(0);
@@ -336,6 +361,9 @@
                 cell3 = newRow.insertCell(2);
                 cell3.innerHTML = parseInt(data["price"]) * (parseInt(data["qty"]) + parseInt(prevqty));  
               }
+             await postSellOrderData(data)
+             socket.emit("message",{"message":"insert sell event received"})
+             clearFields();
              }
 
              async function fetchSellOrderData () {
@@ -392,7 +420,7 @@
             }
 
             async function main(){
-              await fetchBuyOrderData()
+              await fetchData()
               await fetchSellOrderData()
             }
       </script>

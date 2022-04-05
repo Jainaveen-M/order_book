@@ -6,7 +6,6 @@ const Buy = db.Buy
 
 const addBuyOrder = async(req,res)=>{
     let data = {
-        id:req.body.id,
         qty:req.body.qty,
         price:req.body.price,
         total_price:req.body.price
@@ -35,7 +34,6 @@ const getAllBuyOrder = async (req, res) => {
         b.push(buy[i]['dataValues'])
     }
     res.status(200).send(b)
-
 }
 
 const insertPosition =async (req,res)=>{
@@ -45,6 +43,7 @@ const insertPosition =async (req,res)=>{
         ]
     })
     // TODO: to find the prev min and find the index and add it to the row
+    diff=[];
     b =[]
     for (var i = 0; i < buy.length && i<20; i++){
         b.push(buy[i]['dataValues'])
@@ -52,6 +51,10 @@ const insertPosition =async (req,res)=>{
     p =[];
     for(var i=0;i<b.length;i++){
         p.push(b[i].price)
+    }
+    q=[];
+    for(var i=0;i<b.length;i++){
+        q.push(b[i].qty)
     }
     console.log(" ===Price === ",p);
     console.log("p.indexOf(req.body.price)",p.indexOf(req.body.price));
@@ -67,16 +70,21 @@ const insertPosition =async (req,res)=>{
     console.log(" ======= index of the new element ======  ",b.indexOf(req.body.price))
     data = {
         "insert_position":b.indexOf(req.body.price),
+        "price":req.body.price,
+        "qty":q[b.indexOf(req.body.price)]+req.body.price,
         "status":0
     }
    }
    else{
     data = {
         "insert_position":p.indexOf(req.body.price),
+        "price":req.body.price,
+        "qty":q[p.indexOf(req.body.price)]+req.body.qty,
         "status":1
     }
    }
-    res.send(data)
+   diff.push(data);
+   res.send(data)
 }
 
 
@@ -119,11 +127,8 @@ const insertBuyOrderPosition = async (data)=>{
 
 
 
-
 module.exports = {
     addBuyOrder,
     getAllBuyOrder,
-    //orderProcessor,
     insertPosition
-   // updateBuyOrder
 }

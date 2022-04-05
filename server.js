@@ -75,8 +75,10 @@ socketIO.on('connection',  (client)=> {
     socketIO.emit('buyorder', data);
   })
 
+
   client.on("sellorder",(data)=>{
     console.log("sell order...",data)
+    socketIO.emit('sellorder', data);
   })
 
 
