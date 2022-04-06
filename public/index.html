@@ -69,6 +69,10 @@
                 <label for="">Qty</label>
                 <input type="text" autocomplete="off" name="qty" id="qty">
             </div>
+            <input type="checkbox" id="buy-btn" name="buy" value="buy">
+            <label for="buy">Buy</label><br>
+            <input type="checkbox" id="sell-btn" name="sell" value="sell">
+            <label for="sell">Sell</label><br>
             <input type="button" value="Place order" onclick="onFormSubmit()">
             <input type="button" name="" onclick="updateValue()" value="update">
             <input type="button" value="delete" onclick="myDeleteFunction()">
@@ -142,10 +146,15 @@
 
              function onFormSubmit(){
               var result = readform()
-             socket.emit("message",insertBuyOrder(result))
-             //socket.emit("message",insertSellOrder(result))
-              console.log(result['price'])
-              console.log(result['qty'])
+              if(document.getElementById('buy-btn').checked && document.getElementById('sell-btn').checked){
+                alert("Please choose one order")
+              }
+              if(document.getElementById('buy-btn').checked){
+                socket.emit("message",insertBuyOrder(result))
+              }
+              if(document.getElementById('sell-btn').checked){
+                socket.emit("message",insertSellOrder(result))
+              }
             }
 
           

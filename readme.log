@@ -17,4 +17,12 @@
                   }
                 }        
               }
-            }
+         
+         
+
+
+
+            <input type="checkbox" id="buy-btn" name="buy" value="buy">
+            <label for="buy">Buy</label><br>
+            <input type="checkbox" id="sell-btn" name="sell" value="sell">
+            <label for="sell">Sell</label><br>
