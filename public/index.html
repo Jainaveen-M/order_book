@@ -48,7 +48,9 @@
         td{
             color: aliceblue;
         }
-        
+        a{
+          color:red
+        }
         .list{
             margin: 50px
         }
@@ -83,9 +85,12 @@
           <table class="list" id="buyorder">
             <thead>
                 <tr>
+                  
                     <th class="header">Price</th>
                     <th class="header">Qty</th>
                     <th class="header">Total</th>
+                    
+
                 </tr>
             </thead>
             <tbody>
@@ -184,9 +189,12 @@
 
            async function processBuyOrder(data){
             var table = document.getElementById("buyorder").getElementsByTagName('tbody')[0];
+            var table_size = document.getElementById('buyorder').rows.length;
+            console.log(">>>>> table size <<<< ",table_size)
             console.log("===== result =====",data)
             var insert_index = data['insert_position']
               if(data['status']==0){
+
                 insert_index = insert_index-1
                 console.log("inser message",data)
                 console.log("insert postion ===",insert_index);
@@ -278,6 +286,7 @@
                return response.json();
             }
 
+           
             
 
             // sell order logic

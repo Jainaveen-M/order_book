@@ -14,6 +14,8 @@ router.get('/getsellorder', sellorderController.getAllSellOrder)
 
 router.post('/insert',sellorderController.insertPosition)
 
+router.post('/delete',sellorderController.deleteSellOrder)
+
 router.get('/home',(req,res)=>{
     const p = path.join(process.cwd()+"/public/index.html")
     res.sendFile(p)

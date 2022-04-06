@@ -22,15 +22,25 @@ const addBuyOrder = async(req,res)=>{
     console.log("buy order details ",data)
 }
 
+const deleteBuyOrder = async(req,res)=>{
+    await Buy.destroy({
+        where: {
+            id: parseInt(req.body.id)
+        }
+    })
+    res.status(200).send({"message":"order deleted successfully..."})
+}
+
 
 const getAllBuyOrder = async (req, res) => {
     let buy = await Buy.findAll({
         order: [
             ['price', 'asc'],
-        ]
+        ],
+        limit:20
     })
     b =[]
-    for (var i = 0; i < buy.length && i<20; i++){
+    for (var i = 0; i < buy.length; i++){
         b.push(buy[i]['dataValues'])
     }
     res.status(200).send(b)
@@ -40,12 +50,14 @@ const insertPosition =async (req,res)=>{
     let buy = await Buy.findAll({
         order: [
             ['price', 'desc'],
-        ]
+        ],
+        limit:20
     })
     // TODO: to find the prev min and find the index and add it to the row
     diff=[];
     b =[]
-    for (var i = 0; i < buy.length && i<20; i++){
+
+    for (var i = 0; i < buy.length; i++){
         b.push(buy[i]['dataValues'])
     }
     p =[];
@@ -87,9 +99,9 @@ const insertPosition =async (req,res)=>{
 }
 
 //TO FIND THE INDEX
-function locationOf(el, arr, st, en) {
-    st = st || 0;
-    en = en || arr.length;
+function locationOf(el, arr) {
+    st =  0;
+    en = arr.length;
     for (i = 0; i < arr.length; i++) {
         if (arr[i].price < el)
             return i;
@@ -131,5 +143,6 @@ const insertBuyOrderPosition = async (data)=>{
 module.exports = {
     addBuyOrder,
     getAllBuyOrder,
-    insertPosition
+    insertPosition,
+    deleteBuyOrder
 }

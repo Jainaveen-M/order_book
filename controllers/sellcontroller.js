@@ -117,8 +117,17 @@ function locationOf(el, arr, st, en) {
     return en;
   }
 
+  const deleteSellOrder = async(req,res)=>{
+     Sell.destroy({
+        where: {
+            id: parseInt(req.body.id)
+        }
+    })
+    res.status(200).send({"message":"order deleted successfully..."})
+}
   module.exports = {
       addSellOrder,
       getAllSellOrder,
-      insertPosition
+      insertPosition,
+      deleteSellOrder
   }
