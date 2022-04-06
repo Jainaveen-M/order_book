@@ -77,10 +77,6 @@
             <input type="button" name="" onclick="updateValue()" value="update">
             <input type="button" value="delete" onclick="myDeleteFunction()">
        </form>
-
-       <!-- <input type="radio" name="colors" id="red" class="r-btn">Buy<br>
-       <input type="radio" name="colors" id="blue" class="r-btn">Sell -->
-
         <div>
             <h2>
               Buy Order
@@ -146,8 +142,11 @@
 
              function onFormSubmit(){
               var result = readform()
+              if(!document.getElementById('buy-btn').checked && !document.getElementById('sell-btn').checked){
+                alert("Please choose buy or sell order")
+              }
               if(document.getElementById('buy-btn').checked && document.getElementById('sell-btn').checked){
-                alert("Please choose one order")
+                alert("Please choose any one order")
               }
               if(document.getElementById('buy-btn').checked){
                 socket.emit("message",insertBuyOrder(result))
@@ -173,7 +172,7 @@
               socket.emit('buyorder',await insertBuyOrderResult(data));
               await postData(data)
               clearFields();
-        }
+            }
 
             async function insertBuyOrderResult(data){
             var result = await getBuyOrderInsertPosition(data);
@@ -227,6 +226,8 @@
             function clearFields(){
               document.getElementById('price').value = ''
               document.getElementById('qty').value=''
+              document.getElementById('buy-btn').checked=false
+              document.getElementById('sell-btn').checked=false
             }
             
 

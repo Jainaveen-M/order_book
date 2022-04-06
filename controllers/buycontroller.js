@@ -58,6 +58,7 @@ const insertPosition =async (req,res)=>{
     }
     console.log(" ===Price === ",p);
     console.log("p.indexOf(req.body.price)",p.indexOf(req.body.price));
+    // IF THE ELEMENT IS NOT PRESENT RETURN INSERT POSITION
    if(p.indexOf(req.body.price)==-1){
     for(var i=0;i<b.length;i++){
         console.log(" === after price === ",b[i]);
@@ -70,16 +71,12 @@ const insertPosition =async (req,res)=>{
     console.log(" ======= index of the new element ======  ",b.indexOf(req.body.price))
     data = {
         "insert_position":b.indexOf(req.body.price),
-        "price":req.body.price,
-        "qty":q[b.indexOf(req.body.price)]+req.body.price,
         "status":0
     }
    }
    else{
     data = {
         "insert_position":p.indexOf(req.body.price),
-        "price":req.body.price,
-        "qty":q[p.indexOf(req.body.price)]+req.body.qty,
         "status":1
     }
    }
@@ -87,7 +84,7 @@ const insertPosition =async (req,res)=>{
    res.send(data)
 }
 
-
+//TO FIND THE INDEX
 function locationOf(el, arr, st, en) {
     st = st || 0;
     en = en || arr.length;
@@ -95,9 +92,11 @@ function locationOf(el, arr, st, en) {
         if (arr[i].price < el)
             return i;
     }
+    console.log("insert postion from the location of function",en)
     return en;
   }
 
+  // 
 const insertBuyOrderPosition = async (data)=>{
     return Buy.count({ where: { price: data.price } })
       .then(async (count) =>{

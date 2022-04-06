@@ -13,21 +13,21 @@ module.exports = (sequelize,DataTypes) =>{
                 }
             },
             qty: {
-                type : DataTypes.INTEGER,
+                type : DataTypes.DOUBLE,
                 allowNull:false,
                 validate:{
                     notEmpty:true,
                 }
             },
             price: {
-                type : DataTypes.INTEGER,
+                type : DataTypes.DOUBLE,
                 allowNull:false,
                 validate:{
                     notEmpty:true,
                 }
             },
             total_price: {
-                type : DataTypes.INTEGER,
+                type : DataTypes.DOUBLE,
                 allowNull:false,
                 validate:{
                     notEmpty:true,
