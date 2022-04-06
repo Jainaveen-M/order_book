@@ -69,12 +69,14 @@ const insertPosition =async (req,res)=>{
     }
     console.log("After ",b);
     console.log(" ======= index of the new element ======  ",b.indexOf(req.body.price))
+    // if 0 element is not present 
     data = {
         "insert_position":b.indexOf(req.body.price),
         "status":0
     }
    }
    else{
+    // if 1 element is present 
     data = {
         "insert_position":p.indexOf(req.body.price),
         "status":1
@@ -108,7 +110,7 @@ const insertBuyOrderPosition = async (data)=>{
           await Buy.update(
               {
                   qty :qty,
-                    total_price:qty*data.price
+                  total_price:qty*data.price
                 }
               ,{
                   where: {

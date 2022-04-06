@@ -74,8 +74,6 @@
             <input type="checkbox" id="sell-btn" name="sell" value="sell">
             <label for="sell">Sell</label><br>
             <input type="button" value="Place order" onclick="onFormSubmit()">
-            <input type="button" name="" onclick="updateValue()" value="update">
-            <input type="button" value="delete" onclick="myDeleteFunction()">
        </form>
         <div>
             <h2>
@@ -123,8 +121,7 @@
             socket.on('message', (data) =>{
                 console.log("++++ event received ++++")
                 console.log(" ======= message =======",data)
-                //document.location.reload();
-                
+                //document.location.reload(); 
              })
             
              socket.on('buyorder', async (data) =>{
@@ -189,39 +186,33 @@
             var table = document.getElementById("buyorder").getElementsByTagName('tbody')[0];
             console.log("===== result =====",data)
             var insert_index = data['insert_position']
-            if(data['status']==0){
-              insert_index = insert_index-1
-              console.log("inser message",data)
-              console.log("insert postion ===",insert_index);
-              var newRow = table.insertRow(insert_index);
-              cell1 = newRow.insertCell(0);
-              cell1.innerHTML = data["price"];
-              cell2 = newRow.insertCell(1);
-              cell2.innerHTML = data["qty"];
-              cell3 = newRow.insertCell(2);
-              cell3.innerHTML = data["price"] * data["qty"];
-            }
-            else{
-              var prevqty = document.getElementById('buyorder').getElementsByTagName('tr')[insert_index+1].getElementsByTagName('td')[1].innerText
-              console.log("====== prev qty ==== ",prevqty)
-              document.getElementById("buyorder").deleteRow(insert_index+1);
-              console.log("inserttt message",data)
-              console.log("insert postion ===",insert_index);
-              var newRow = table.insertRow(insert_index);
-              cell1 = newRow.insertCell(0);
-              cell1.innerHTML = data["price"];
-              cell2 = newRow.insertCell(1);
-              cell2.innerHTML = parseInt(data["qty"]) + parseInt(prevqty);
-              cell3 = newRow.insertCell(2);
-              cell3.innerHTML = parseInt(data["price"]) * (parseInt(data["qty"]) + parseInt(prevqty));
-            }
-            }
-
-              //delete @ specific index
-              function myDeleteFunction() {
-                document.getElementById("buyorder").deleteRow(5);
+              if(data['status']==0){
+                insert_index = insert_index-1
+                console.log("inser message",data)
+                console.log("insert postion ===",insert_index);
+                var newRow = table.insertRow(insert_index);
+                cell1 = newRow.insertCell(0);
+                cell1.innerHTML = data["price"];
+                cell2 = newRow.insertCell(1);
+                cell2.innerHTML = data["qty"];
+                cell3 = newRow.insertCell(2);
+                cell3.innerHTML = data["price"] * data["qty"];
               }
-
+              else{
+                var prevqty = document.getElementById('buyorder').getElementsByTagName('tr')[insert_index+1].getElementsByTagName('td')[1].innerText
+                console.log("====== prev qty ==== ",prevqty)
+                document.getElementById("buyorder").deleteRow(insert_index+1);
+                console.log("inserttt message",data)
+                console.log("insert postion ===",insert_index);
+                var newRow = table.insertRow(insert_index);
+                cell1 = newRow.insertCell(0);
+                cell1.innerHTML = data["price"];
+                cell2 = newRow.insertCell(1);
+                cell2.innerHTML = parseInt(data["qty"]) + parseInt(prevqty);
+                cell3 = newRow.insertCell(2);
+                cell3.innerHTML = parseInt(data["price"]) * (parseInt(data["qty"]) + parseInt(prevqty));
+              }
+            }
 
             function clearFields(){
               document.getElementById('price').value = ''
@@ -287,17 +278,7 @@
                return response.json();
             }
 
-            function updateValue(){  
-              var table = document.getElementById("buyorder").getElementsByTagName('tbody')[0];
-              var newRow = table.insertRow(10);
-              cell1 = newRow.insertCell(0);
-              cell1.innerHTML = 8888;
-              cell2 = newRow.insertCell(1);
-              cell2.innerHTML = 8888;
-              cell3 = newRow.insertCell(2);
-              cell3.innerHTML = 8888 * 8888;
-            }
-
+            
 
             // sell order logic
             async function insertSellOrder(data){
