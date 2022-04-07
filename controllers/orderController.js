@@ -5,7 +5,11 @@ const Buy = db.Buy
 const Sell = db.Sell
 
 const getAllBuyOrder = async (req, res) => {
-    let buy = await Buy.findAll()
+    let buy = await Buy.findAll({
+        order: [
+            ['price', 'asc'],
+        ]
+    })
     b = []
     for (var i = 0; i < buy.length; i++){
         b.push(buy[i]['dataValues'])
@@ -14,7 +18,11 @@ const getAllBuyOrder = async (req, res) => {
 }
 
 const getAllSellOrder = async (req,res)=>{
-    let sell = await Sell.findAll()
+    let sell = await Sell.findAll({
+        order: [
+            ['price', 'desc'],
+        ],
+    })
     s = []
     for (var i = 0; i < sell.length; i++){
         s.push(sell[i]['dataValues'])
