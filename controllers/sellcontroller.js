@@ -26,11 +26,12 @@ const addSellOrder = async (req,res)=>{
 const getAllSellOrder = async (req,res)=>{
     let sell = await Sell.findAll({
         order: [
-            ['price', 'desc'],
-        ]
+            ['price', 'asc'],
+        ],
+        limit:20
     })
     s =[]
-    for (var i = 0; i < sell.length && i<20; i++){
+    for (var i = sell.length-1; i>=0; i--){
         s.push(sell[i]['dataValues'])
     }
     res.status(200).send(s)
@@ -68,7 +69,8 @@ const insertPosition =async (req,res)=>{
     let sell = await Sell.findAll({
         order: [
             ['price', 'asc'],
-        ]
+        ],
+        limit:20
     })
     // TODO: to find the prev min and find the index and add it to the row
     s =[]

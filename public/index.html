@@ -192,9 +192,19 @@
             var table_size = document.getElementById('buyorder').rows.length;
             console.log(">>>>> table size <<<< ",table_size)
             console.log("===== result =====",data)
-            var insert_index = data['insert_position']
-              if(data['status']==0){
+            
+            //contion to check the values in cells
+            var oTable = document.getElementById("buyorder")
+            var oCells = oTable.rows.item(table_size-1).cells;
+            console.log(">>>>>>>> ocellllllll <<<<<<",oCells[0].firstChild.data)
+            var check_value = oCells[0].firstChild.data;
 
+            var insert_index = data['insert_position']
+              if(data['status']==0 && table_size<22){  
+                if(parseInt(check_value)<data['price']){
+                  console.log("======= cell value ======",check_value);
+                  document.getElementById("buyorder").deleteRow(table_size-1);
+                }
                 insert_index = insert_index-1
                 console.log("inser message",data)
                 console.log("insert postion ===",insert_index);
@@ -206,7 +216,7 @@
                 cell3 = newRow.insertCell(2);
                 cell3.innerHTML = data["price"] * data["qty"];
               }
-              else{
+              if(data['status']==1 && table_size<22){
                 var prevqty = document.getElementById('buyorder').getElementsByTagName('tr')[insert_index+1].getElementsByTagName('td')[1].innerText
                 console.log("====== prev qty ==== ",prevqty)
                 document.getElementById("buyorder").deleteRow(insert_index+1);
@@ -310,7 +320,20 @@
              function processSellOrder(data){
                 var table = document.getElementById("sellorder").getElementsByTagName('tbody')[0];
                 var insert_index = data['insert_position']
-              if(data['status']==0){
+                var table_size = document.getElementById('sellorder').rows.length;
+
+              //check values in sell order
+              var oTable = document.getElementById("sellorder")
+              var oCells = oTable.rows.item(table_size-1).cells;
+              console.log(">>>>>>>> ocellllllll <<<<<<",oCells[0].firstChild.data)
+              var check_value = oCells[0].firstChild.data;
+
+
+                if(data['status']==0 && table_size<22){  
+                  if(parseInt(check_value)>data['price'] ){
+                    console.log("======= cell value ======",check_value);
+                    document.getElementById("sellorder").deleteRow(table_size-1);
+                  }
                 insert_index = insert_index-1
                 console.log("inser message",data)
                 console.log("insert postion ===",insert_index);
@@ -322,7 +345,7 @@
                 cell3 = newRow.insertCell(2);
                 cell3.innerHTML = data["price"] * data["qty"];
               }
-              else{
+              if(data['status']==1 && table_size<22){
                 var prevqty = document.getElementById('sellorder').getElementsByTagName('tr')[insert_index+1].getElementsByTagName('td')[1].innerText;
                 console.log("====== prev qty ==== ",prevqty)
                 document.getElementById("sellorder").deleteRow(insert_index+1);
@@ -394,6 +417,8 @@
             async function main(){
               await fetchBuyOrderData()
               await fetchSellOrderData()
+              console.log("Buy order size",document.getElementById('buyorder').rows.length);
+              console.log("Sell order size",document.getElementById('sellorder').rows.length);
             }
       </script>
     </body>

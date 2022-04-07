@@ -35,12 +35,12 @@ const deleteBuyOrder = async(req,res)=>{
 const getAllBuyOrder = async (req, res) => {
     let buy = await Buy.findAll({
         order: [
-            ['price', 'asc'],
+            ['price', 'desc'],
         ],
         limit:20
     })
     b =[]
-    for (var i = 0; i < buy.length; i++){
+    for (var i = buy.length-1; i>=0; i--){
         b.push(buy[i]['dataValues'])
     }
     res.status(200).send(b)
@@ -60,6 +60,7 @@ const insertPosition =async (req,res)=>{
     for (var i = 0; i < buy.length; i++){
         b.push(buy[i]['dataValues'])
     }
+    console.log(" ======== buy list size ======== ",buy.length)
     p =[];
     for(var i=0;i<b.length;i++){
         p.push(b[i].price)
