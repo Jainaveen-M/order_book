@@ -200,12 +200,16 @@
             var check_value = oCells[0].firstChild.data;
 
             var insert_index = data['insert_position']
-              if(data['status']==0 && table_size<22){  
-                if(parseInt(check_value)<data['price']){
+              if(data['status']==0 && table_size<22 ){
+                insert_index = insert_index-1  
+                if(parseInt(check_value)<data['price'] && table_size==21){
                   console.log("======= cell value ======",check_value);
                   document.getElementById("buyorder").deleteRow(table_size-1);
                 }
-                insert_index = insert_index-1
+                if(parseInt(check_value)>data['price'] && table_size<22){
+                  insert_index=insert_index+1;
+                }
+               
                 console.log("inser message",data)
                 console.log("insert postion ===",insert_index);
                 var newRow = table.insertRow(insert_index);
@@ -330,11 +334,14 @@
 
 
                 if(data['status']==0 && table_size<22){  
-                  if(parseInt(check_value)>data['price'] ){
+                  insert_index = insert_index-1
+                  if(parseInt(check_value)>data['price'] && table_size==21 ){
                     console.log("======= cell value ======",check_value);
                     document.getElementById("sellorder").deleteRow(table_size-1);
                   }
-                insert_index = insert_index-1
+                  if(parseInt(check_value)<data['price'] && table_size<22){
+                    insert_index=insert_index+1;
+                  }
                 console.log("inser message",data)
                 console.log("insert postion ===",insert_index);
                 var newRow = table.insertRow(insert_index);
