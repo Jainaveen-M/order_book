@@ -209,6 +209,9 @@
                 if(parseInt(check_value)>data['price'] && table_size<22){
                   insert_index=insert_index+1;
                 }
+                if(parseInt(check_value)>data['price'] && table_size==21){
+                  return;
+                }
                
                 console.log("inser message",data)
                 console.log("insert postion ===",insert_index);
@@ -341,6 +344,10 @@
                   }
                   if(parseInt(check_value)<data['price'] && table_size<22){
                     insert_index=insert_index+1;
+                  }
+
+                  if(parseInt(check_value)<data['price'] && table_size==21){
+                    return;
                   }
                 console.log("inser message",data)
                 console.log("insert postion ===",insert_index);
