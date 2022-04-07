@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,88 +9,100 @@
 
     <title>All orders</title>
     <style>
-        body{
+        body {
             background-color: black;
         }
-        table, th, td {
+        
+        table,
+        th,
+        td {
             border: .5px solid white;
             border-collapse: collapse;
         }
-        h2{
+        
+        h2 {
             color: aliceblue;
-            
+            margin: 10px;
+            padding-left: 20px;
         }
-        .header{
+        
+        .header {
             color: white;
             padding: 1% 1%;
         }
-        #buyorder{
+        
+        #buyorder {
             min-width: 30%;
-            float:left ;
-            margin-right: 10%;
-
         }
-        #sellorder{
-          min-width: 30%;
-
-          
-      }
-        td{
+        
+        #sellorder {
+            min-width: 30%;
+        }
+        
+        td {
             color: aliceblue;
         }
+        
         tr:nth-child(even) {
-          background-color: rgb(52, 50, 50);
+            background-color: rgb(41, 39, 39);
         }
- 
+        
+        .row::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
     </style>
 </head>
-<body onload = "main()">
-    <div>
-        <h2 class>
-          Buy Order
-        </h2>
-      </div>
-      <table class="list" id="buyorder">
-        <thead>
-            <tr>
-                <th class="header">Id</th>
-                <th class="header">Price</th>
-                <th class="header">Qty</th>
-                <th class="header">Total</th>
-                <th class="header">Operation</th>
-            </tr>
-        </thead>
-        <tbody>
-          <!-- <tr data-index="2" >
-          </tr> -->
-        </tbody>
-    </table>
-    <div>
+
+<body onload="main()">
+    <div class="row">
+
         <h2>
-          Sell Order
+            Buy Order
         </h2>
-    </div>
-      <table class="list" id="sellorder">
-        <thead>
-            <tr>
-                <th class="header">Id</th>
-                <th class="header">Price</th>
-                <th class="header">Qty</th>
-                <th class="header">Total</th>
-                <th class="header">Operation</th>
-            </tr>
-        </thead>
-        <tbody>
-          <!-- <tr data-index="2" >
+
+        <table class="list" id="buyorder">
+            <thead>
+                <tr>
+                    <th class="header">Id</th>
+                    <th class="header">Price</th>
+                    <th class="header">Qty</th>
+                    <th class="header">Total</th>
+                    <th class="header">Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr data-index="2" >
           </tr> -->
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+        <div>
+            <h2>
+                Sell Order
+            </h2>
+        </div>
+        <table class="list" id="sellorder">
+            <thead>
+                <tr>
+                    <th class="header">Id</th>
+                    <th class="header">Price</th>
+                    <th class="header">Qty</th>
+                    <th class="header">Total</th>
+                    <th class="header">Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr data-index="2" >
+          </tr> -->
+            </tbody>
+        </table>
+    </div>
     <script>
-      
-       async function getAllBuyOrder(){
-           const response = await fetch("http://localhost:3344/api/allorder/allbuyorder");
-           let data = await response.json();
-           for (var i = 0; i < data.length; i++){
+        async function getAllBuyOrder() {
+            const response = await fetch("http://localhost:3344/api/allorder/allbuyorder");
+            let data = await response.json();
+            for (var i = 0; i < data.length; i++) {
                 var table = document.getElementById("buyorder").getElementsByTagName('tbody')[0];
                 var newRow = table.insertRow(0);
                 cell1 = newRow.insertCell(0);
@@ -103,67 +116,68 @@
                 cell5 = newRow.insertCell(4);
                 cell5.innerHTML = `<button type="button" class="btn btn-danger btn-sm m-1" onclick="onBuyDelete(this,${data[i]["id"]})">Delete</button>`
             }
-       }
-       async function getAllSellOrder(){
-        const response = await fetch("http://localhost:3344/api/allorder/allsellorder");
-        let data = await response.json();
-        for (var i = 0; i < data.length; i++){
-             var table = document.getElementById("sellorder").getElementsByTagName('tbody')[0];
-             var newRow = table.insertRow(0);
-             cell1 = newRow.insertCell(0);
-             cell1.innerHTML = data[i]["id"];
-             cell2 = newRow.insertCell(1);
-             cell2.innerHTML = data[i]["price"];
-             cell3 = newRow.insertCell(2);
-             cell3.innerHTML = data[i]["qty"];
-             cell4 = newRow.insertCell(3);
-             cell4.innerHTML = data[i]["price"] * data[i]["qty"];
-             cell5 = newRow.insertCell(4);
-            cell5.innerHTML = `<button type="button" class="btn btn-danger btn-sm m-1" onclick="onSellDelete(this,${data[i]["id"]})">Delete</button>`
-         }
-    }
+        }
+        async function getAllSellOrder() {
+            const response = await fetch("http://localhost:3344/api/allorder/allsellorder");
+            let data = await response.json();
+            for (var i = 0; i < data.length; i++) {
+                var table = document.getElementById("sellorder").getElementsByTagName('tbody')[0];
+                var newRow = table.insertRow(0);
+                cell1 = newRow.insertCell(0);
+                cell1.innerHTML = data[i]["id"];
+                cell2 = newRow.insertCell(1);
+                cell2.innerHTML = data[i]["price"];
+                cell3 = newRow.insertCell(2);
+                cell3.innerHTML = data[i]["qty"];
+                cell4 = newRow.insertCell(3);
+                cell4.innerHTML = data[i]["price"] * data[i]["qty"];
+                cell5 = newRow.insertCell(4);
+                cell5.innerHTML = `<button type="button" class="btn btn-danger btn-sm m-1" onclick="onSellDelete(this,${data[i]["id"]})">Delete</button>`
+            }
+        }
 
-    async function onBuyDelete(td,id) {
-        console.log(">>>>>>> iddddd <<<<< ",id)
-        //if (confirm('Are you sure to delete this record ? ')) {
+        async function onBuyDelete(td, id) {
+            console.log(">>>>>>> iddddd <<<<< ", id)
+                //if (confirm('Are you sure to delete this record ? ')) {
             row = td.parentElement.parentElement;
             document.getElementById("buyorder").deleteRow(row.rowIndex);
             const response = await fetch("http://localhost:3344/api/buyorder/delete", {
-              method: 'POST',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-              body: `{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: `{
                 "id": ${id}
                 }`,
-              });
-              
-       //}
-    }
-    async function onSellDelete(td,id) {
-        console.log(">>>>>>> iddddd <<<<< ",id)
-        //if (confirm('Are you sure to delete this record ? ')) {
+            });
+
+            //}
+        }
+        async function onSellDelete(td, id) {
+            console.log(">>>>>>> iddddd <<<<< ", id)
+                //if (confirm('Are you sure to delete this record ? ')) {
             row = td.parentElement.parentElement;
             document.getElementById("sellorder").deleteRow(row.rowIndex);
             const response = await fetch("http://localhost:3344/api/sellorder/delete", {
-              method: 'POST',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-              body: `{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: `{
                 "id": ${id}
                 }`,
-              });
-              
-       // }
-    }
+            });
 
-       async function main(){
-           await getAllBuyOrder()
-           await getAllSellOrder()
-       }
+            // }
+        }
+
+        async function main() {
+            await getAllBuyOrder()
+            await getAllSellOrder()
+        }
     </script>
 </body>
+
 </html>

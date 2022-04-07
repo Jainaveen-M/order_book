@@ -1,231 +1,238 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Place order</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- <link rel="stylesheet" href="./style.css"> -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <style>
-          body{
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Place order</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" href="./style.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body {
             background-color: black;
         }
         
-        table, th, td {
+        table,
+        th,
+        td {
             border: 0.5px solid white;
             border-collapse: collapse;
         }
         
-        .header{
+        .header {
             color: white;
             padding: 1% 1%;
             margin-left: 5%;
         }
         
-        #buyorder{
+        #buyorder {
             min-width: 50%;
         }
         
-        #sellorder{
+        #sellorder {
             min-width: 50%;
         }
         
-        h2{
+        h2 {
             color: aliceblue;
         }
         
-        label{
+        label {
             color: white;
             margin: 10px;
         }
         
-        input{
+        input {
             margin: 10px;
         }
         
-        td{
+        td {
             color: aliceblue;
         }
-        a{
-          color:red
-        }
-        .list{
-            margin: 50px
-        }
-        .r-btn{
-          color: white;
-          background-color: white;
-        }
-        .btn{
-         padding: 15px;
-         margin: 10px ;
-        }
-
-        tr:nth-child(even) {
-          background-color: rgb(52, 50, 50);
+        
+        a {
+            color: red
         }
         
-        </style>
-    </head>
-    <body onload="main()">
-       <form action="" onsubmit="">
-            <div>
-                <label for="">Price</label>
-                <input type="text" autocomplete="off" name="price" id="price">
-            </div>
-            <div>
-                <label for="">Qty</label>
-                <input type="text" autocomplete="off" name="qty" id="qty">
-            </div>
-            <!-- <input type="checkbox" id="buy-btn" name="buy" value="buy">
+        .list {
+            margin: 50px
+        }
+        
+        .r-btn {
+            color: white;
+            background-color: white;
+        }
+        
+        .btn {
+            padding: 15px;
+            margin: 10px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: rgb(41, 39, 39);
+        }
+    </style>
+</head>
+
+<body onload="main()">
+    <form action="" onsubmit="">
+        <div>
+            <label for="">Price</label>
+            <input type="text" autocomplete="off" name="price" id="price">
+        </div>
+        <div>
+            <label for="">Qty</label>
+            <input type="text" autocomplete="off" name="qty" id="qty">
+        </div>
+        <!-- <input type="checkbox" id="buy-btn" name="buy" value="buy">
             <label for="buy">Buy</label><br>
             <input type="checkbox" id="sell-btn" name="sell" value="sell">
             <label for="sell">Sell</label><br>
             <input type="button" value="Place order" onclick="onFormSubmit()"> -->
-           <div class="btn">
+        <div class="btn">
             <button type="button" class="btn btn-success btn-m" onclick="placeBuyOrder()">Buy</button>
             <button type="button" class="btn btn-danger btn-m" onclick="placeSellOrder()">Sell</button>
-           </div>
-
-       </form>
-        <div>
-            <h2>
-              Buy Order
-            </h2>
-          </div>
-          <table class="list" id="buyorder">
-            <thead>
-                <tr>
-                  
-                    <th class="header">Price</th>
-                    <th class="header">Qty</th>
-                    <th class="header">Total</th>
-                    
-
-                </tr>
-            </thead>
-            <tbody>
-              <!-- <tr data-index="2" >
-              </tr> -->
-            </tbody>
-        </table>
-        <div>
-          <h2>
-            Sell Order
-          </h2>
         </div>
-        <table class="list" id="sellorder">
-          <thead>
-              <tr>
-                  <th class="header">Price</th>
-                  <th class="header">Qty</th>
-                  <th class="header">Total</th>
-              </tr>
-          </thead>
-          <tbody>
-    
-          </tbody>
-      </table>
 
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-      <script src="http://localhost:3344/socket.io/socket.io.js"></script>
-      <script>
-            //socket init
-            var socket = io()
-           
-            console.log(socket)
-            socket.on('message', (data) =>{
-                console.log("++++ event received ++++")
-                console.log(" ======= message =======",data)
+    </form>
+    <div>
+        <h2>
+            Buy Order
+        </h2>
+    </div>
+    <table class="list" id="buyorder">
+        <thead>
+            <tr>
+
+                <th class="header">Price</th>
+                <th class="header">Qty</th>
+                <th class="header">Total</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            <!-- <tr data-index="2" >
+              </tr> -->
+        </tbody>
+    </table>
+    <div>
+        <h2>
+            Sell Order
+        </h2>
+    </div>
+    <table class="list" id="sellorder">
+        <thead>
+            <tr>
+                <th class="header">Price</th>
+                <th class="header">Qty</th>
+                <th class="header">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://localhost:3344/socket.io/socket.io.js"></script>
+    <script>
+        //socket init
+        var socket = io()
+
+        console.log(socket)
+        socket.on('message', (data) => {
+            console.log("++++ event received ++++")
+            console.log(" ======= message =======", data)
                 //document.location.reload(); 
-             })
-            
-             socket.on('buyorder', async (data) =>{
-              console.log("##### buyorder event received #######")
-              console.log(" ======= socket buyorder =======",data)
-              await processBuyOrder(data);
-           })
+        })
 
-           socket.on('sellorder', async (data) =>{
+        socket.on('buyorder', async(data) => {
+            console.log("##### buyorder event received #######")
+            console.log(" ======= socket buyorder =======", data)
+            await processBuyOrder(data);
+        })
+
+        socket.on('sellorder', async(data) => {
             console.log("##### sellorder event received #######")
-            console.log(" ======= socket sellorder =======",data)
+            console.log(" ======= socket sellorder =======", data)
             await processSellOrder(data);
-         })
+        })
 
 
-            function placeBuyOrder(){
-              var result = readform()
-              socket.emit("message",insertBuyOrder(result))
-              clearFields();
-            }
+        function placeBuyOrder() {
+            var result = readform()
+            socket.emit("message", insertBuyOrder(result))
+            clearFields();
+        }
 
-            function placeSellOrder(){
-              var result = readform()
-              socket.emit("message",insertSellOrder(result))
-              clearFields();
-            }
+        function placeSellOrder() {
+            var result = readform()
+            socket.emit("message", insertSellOrder(result))
+            clearFields();
+        }
 
 
-          
 
-            function readform(){
-              var data ={}
-              data['price']= document.getElementById('price').value
-              data['qty'] = document.getElementById('qty').value
-              console.log(data["price"])
-              console.log(data["qty"])   
-              return data
-            }
 
-            // Buy order logics
-            async function insertBuyOrder(data){
-              socket.emit('buyorder',await insertBuyOrderResult(data));
-              await postData(data)
-              clearFields();
-            }
+        function readform() {
+            var data = {}
+            data['price'] = document.getElementById('price').value
+            data['qty'] = document.getElementById('qty').value
+            console.log(data["price"])
+            console.log(data["qty"])
+            return data
+        }
 
-            async function insertBuyOrderResult(data){
+        // Buy order logics
+        async function insertBuyOrder(data) {
+            socket.emit('buyorder', await insertBuyOrderResult(data));
+            await postData(data)
+            clearFields();
+        }
+
+        async function insertBuyOrderResult(data) {
             var result = await getBuyOrderInsertPosition(data);
             let json = {
-                "insert_position":result['insert_position'],
-                "price":data.price,
-                "qty":data.qty,
-                "status":result['status']
+                "insert_position": result['insert_position'],
+                "price": data.price,
+                "qty": data.qty,
+                "status": result['status']
             }
             return json;
-            }
+        }
 
-           async function processBuyOrder(data){
+        async function processBuyOrder(data) {
             var table = document.getElementById("buyorder").getElementsByTagName('tbody')[0];
             var table_size = document.getElementById('buyorder').rows.length;
-            console.log(">>>>> table size <<<< ",table_size)
-            console.log("===== result =====",data)
-            
+            console.log(">>>>> table size <<<< ", table_size)
+            console.log("===== result =====", data)
+
             //contion to check the values in cells
             var oTable = document.getElementById("buyorder")
-            var oCells = oTable.rows.item(table_size-1).cells;
-            console.log(">>>>>>>> ocellllllll <<<<<<",oCells[0].firstChild.data)
+            var oCells = oTable.rows.item(table_size - 1).cells;
+            console.log(">>>>>>>> ocellllllll <<<<<<", oCells[0].firstChild.data)
             var check_value = oCells[0].firstChild.data;
 
             var insert_index = data['insert_position']
-              if(data['status']==0 && table_size<22 ){
-                insert_index = insert_index-1  
-                if(parseInt(check_value)<data['price'] && table_size==21){
-                  console.log("======= cell value ======",check_value);
-                  document.getElementById("buyorder").deleteRow(table_size-1);
+            if (data['status'] == 0 && table_size < 22) {
+                insert_index = insert_index - 1
+                if (parseInt(check_value) < data['price'] && table_size == 21) {
+                    console.log("======= cell value ======", check_value);
+                    document.getElementById("buyorder").deleteRow(table_size - 1);
                 }
-                if(parseInt(check_value)>data['price'] && table_size<22){
-                  insert_index=insert_index+1;
+                if (parseInt(check_value) > data['price'] && table_size < 22) {
+                    insert_index = insert_index + 1;
                 }
-                if(parseInt(check_value)>data['price'] && table_size==21){
-                  return;
+                if (parseInt(check_value) > data['price'] && table_size == 21) {
+                    return;
                 }
-               
-                console.log("inser message",data)
-                console.log("insert postion ===",insert_index);
+
+                console.log("inser message", data)
+                console.log("insert postion ===", insert_index);
                 var newRow = table.insertRow(insert_index);
                 cell1 = newRow.insertCell(0);
                 cell1.innerHTML = data["price"];
@@ -233,13 +240,13 @@
                 cell2.innerHTML = data["qty"];
                 cell3 = newRow.insertCell(2);
                 cell3.innerHTML = data["price"] * data["qty"];
-              }
-              if(data['status']==1 && table_size<22){
-                var prevqty = document.getElementById('buyorder').getElementsByTagName('tr')[insert_index+1].getElementsByTagName('td')[1].innerText
-                console.log("====== prev qty ==== ",prevqty)
-                document.getElementById("buyorder").deleteRow(insert_index+1);
-                console.log("inserttt message",data)
-                console.log("insert postion ===",insert_index);
+            }
+            if (data['status'] == 1 && table_size < 22) {
+                var prevqty = document.getElementById('buyorder').getElementsByTagName('tr')[insert_index + 1].getElementsByTagName('td')[1].innerText
+                console.log("====== prev qty ==== ", prevqty)
+                document.getElementById("buyorder").deleteRow(insert_index + 1);
+                console.log("inserttt message", data)
+                console.log("insert postion ===", insert_index);
                 var newRow = table.insertRow(insert_index);
                 cell1 = newRow.insertCell(0);
                 cell1.innerHTML = data["price"];
@@ -247,119 +254,119 @@
                 cell2.innerHTML = parseInt(data["qty"]) + parseInt(prevqty);
                 cell3 = newRow.insertCell(2);
                 cell3.innerHTML = parseInt(data["price"]) * (parseInt(data["qty"]) + parseInt(prevqty));
-              }
             }
+        }
 
-            function clearFields(){
-              document.getElementById('price').value = ''
-              document.getElementById('qty').value=''
+        function clearFields() {
+            document.getElementById('price').value = ''
+            document.getElementById('qty').value = ''
+        }
+
+
+        // function to get from sql database
+        async function fetchBuyOrderData() {
+            document.getElementById("buyorder").getElementsByTagName('tbody').innerHTML = ''
+            let response = await fetch("http://localhost:3344/api/buyorder/getbuyorder");
+            let data = await response.json();
+            console.log("==== data 1", data);
+            for (var i = 0; i < data.length; i++) {
+                var table = document.getElementById("buyorder").getElementsByTagName('tbody')[0];
+                var newRow = table.insertRow(0);
+                cell1 = newRow.insertCell(0);
+                cell1.innerHTML = data[i]["price"];
+                cell2 = newRow.insertCell(1);
+                cell2.innerHTML = data[i]["qty"];
+                cell3 = newRow.insertCell(2);
+                cell3.innerHTML = data[i]["price"] * data[i]["qty"];
             }
-            
+            console.log(data)
+            return data;
+        }
 
-            // function to get from sql database
-            async function fetchBuyOrderData () {
-              document.getElementById("buyorder").getElementsByTagName('tbody').innerHTML=''
-              let response = await fetch("http://localhost:3344/api/buyorder/getbuyorder");
-              let data = await response.json();
-              console.log("==== data 1",data);
-              for (var i = 0; i < data.length; i++){
-                    var table = document.getElementById("buyorder").getElementsByTagName('tbody')[0];
-                    var newRow = table.insertRow(0);
-                    cell1 = newRow.insertCell(0);
-                    cell1.innerHTML = data[i]["price"];
-                    cell2 = newRow.insertCell(1);
-                    cell2.innerHTML = data[i]["qty"];
-                    cell3 = newRow.insertCell(2);
-                    cell3.innerHTML = data[i]["price"] * data[i]["qty"];
-              }
-              console.log(data)
-              return data;
-            }
-          
-            //function to add buy order to sql database
+        //function to add buy order to sql database
 
-            async function postData(data){
-              const response = await fetch("http://localhost:3344/api/buyorder/addbuyorder", {
+        async function postData(data) {
+            const response = await fetch("http://localhost:3344/api/buyorder/addbuyorder", {
                 method: 'POST',
                 headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: `{
                   "qty": ${data['qty']},
                   "price": ${data['price']},
                   "total_price": ${data['qty'] * data['price']}
                   }`,
-                });
-                
-                response.json().then(data => {
-                  console.log(data);
-                });
-            }
+            });
 
-            async function getBuyOrderInsertPosition(data) {
-              const response = await fetch("http://localhost:3344/api/buyorder/insert", {
+            response.json().then(data => {
+                console.log(data);
+            });
+        }
+
+        async function getBuyOrderInsertPosition(data) {
+            const response = await fetch("http://localhost:3344/api/buyorder/insert", {
                 method: 'POST',
                 headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: `{
                   "price": ${data['price']},
                   "qty":${data['qty']}
                   }`,
-                });
-               return response.json();
+            });
+            return response.json();
+        }
+
+
+
+
+        // sell order logic
+        async function insertSellOrder(data) {
+            socket.emit("sellorder", await inserSellOrderResult(data))
+            await postSellOrderData(data)
+            clearFields();
+        }
+
+        async function inserSellOrderResult(data) {
+            var result = await getSellOrderInsertPosition(data);
+            let json = {
+                "insert_position": result['insert_position'],
+                "price": data.price,
+                "qty": data.qty,
+                "status": result['status']
             }
+            return json;
+        }
 
-           
-            
+        function processSellOrder(data) {
+            var table = document.getElementById("sellorder").getElementsByTagName('tbody')[0];
+            var insert_index = data['insert_position']
+            var table_size = document.getElementById('sellorder').rows.length;
 
-            // sell order logic
-            async function insertSellOrder(data){
-             socket.emit("sellorder",await inserSellOrderResult(data))
-             await postSellOrderData(data)
-             clearFields();
-             }
+            //check values in sell order
+            var oTable = document.getElementById("sellorder")
+            var oCells = oTable.rows.item(table_size - 1).cells;
+            console.log(">>>>>>>> ocellllllll <<<<<<", oCells[0].firstChild.data)
+            var check_value = oCells[0].firstChild.data;
 
-             async function inserSellOrderResult(data){
-                var result = await getSellOrderInsertPosition(data);
-                let json = {
-                    "insert_position":result['insert_position'],
-                    "price":data.price,
-                    "qty":data.qty,
-                    "status":result['status']
+
+            if (data['status'] == 0 && table_size < 22) {
+                insert_index = insert_index - 1
+                if (parseInt(check_value) > data['price'] && table_size == 21) {
+                    console.log("======= cell value ======", check_value);
+                    document.getElementById("sellorder").deleteRow(table_size - 1);
                 }
-                return json;
-             }
+                if (parseInt(check_value) < data['price'] && table_size < 22) {
+                    insert_index = insert_index + 1;
+                }
 
-             function processSellOrder(data){
-                var table = document.getElementById("sellorder").getElementsByTagName('tbody')[0];
-                var insert_index = data['insert_position']
-                var table_size = document.getElementById('sellorder').rows.length;
-
-              //check values in sell order
-              var oTable = document.getElementById("sellorder")
-              var oCells = oTable.rows.item(table_size-1).cells;
-              console.log(">>>>>>>> ocellllllll <<<<<<",oCells[0].firstChild.data)
-              var check_value = oCells[0].firstChild.data;
-
-
-                if(data['status']==0 && table_size<22){  
-                  insert_index = insert_index-1
-                  if(parseInt(check_value)>data['price'] && table_size==21 ){
-                    console.log("======= cell value ======",check_value);
-                    document.getElementById("sellorder").deleteRow(table_size-1);
-                  }
-                  if(parseInt(check_value)<data['price'] && table_size<22){
-                    insert_index=insert_index+1;
-                  }
-
-                  if(parseInt(check_value)<data['price'] && table_size==21){
+                if (parseInt(check_value) < data['price'] && table_size == 21) {
                     return;
-                  }
-                console.log("inser message",data)
-                console.log("insert postion ===",insert_index);
+                }
+                console.log("inser message", data)
+                console.log("insert postion ===", insert_index);
                 var newRow = table.insertRow(insert_index);
                 cell1 = newRow.insertCell(0);
                 cell1.innerHTML = data["price"];
@@ -367,82 +374,83 @@
                 cell2.innerHTML = data["qty"];
                 cell3 = newRow.insertCell(2);
                 cell3.innerHTML = data["price"] * data["qty"];
-              }
-              if(data['status']==1 && table_size<22){
-                var prevqty = document.getElementById('sellorder').getElementsByTagName('tr')[insert_index+1].getElementsByTagName('td')[1].innerText;
-                console.log("====== prev qty ==== ",prevqty)
-                document.getElementById("sellorder").deleteRow(insert_index+1);
-                console.log("insert message",data)
-                console.log("insert postion ===",insert_index);
+            }
+            if (data['status'] == 1 && table_size < 22) {
+                var prevqty = document.getElementById('sellorder').getElementsByTagName('tr')[insert_index + 1].getElementsByTagName('td')[1].innerText;
+                console.log("====== prev qty ==== ", prevqty)
+                document.getElementById("sellorder").deleteRow(insert_index + 1);
+                console.log("insert message", data)
+                console.log("insert postion ===", insert_index);
                 var newRow = table.insertRow(insert_index);
                 cell1 = newRow.insertCell(0);
                 cell1.innerHTML = data["price"];
                 cell2 = newRow.insertCell(1);
                 cell2.innerHTML = parseInt(data["qty"]) + parseInt(prevqty);
                 cell3 = newRow.insertCell(2);
-                cell3.innerHTML = parseInt(data["price"]) * (parseInt(data["qty"]) + parseInt(prevqty));  
-              }
-             }
-
-             async function fetchSellOrderData () {
-              let response = await fetch("http://localhost:3344/api/sellorder/getsellorder");
-              let data = await response.json();
-              for (var i = 0; i < data.length; i++){
-                    var table = document.getElementById("sellorder").getElementsByTagName('tbody')[0];
-                    var newRow = table.insertRow(0);
-                    cell1 = newRow.insertCell(0);
-                    cell1.innerHTML = data[i]["price"];
-                    cell2 = newRow.insertCell(1);
-                    cell2.innerHTML = data[i]["qty"];
-                    cell3 = newRow.insertCell(2);
-                    cell3.innerHTML = data[i]["price"] * data[i]["qty"];
-              }
-              console.log(data)
-              return data;
+                cell3.innerHTML = parseInt(data["price"]) * (parseInt(data["qty"]) + parseInt(prevqty));
             }
-            
-            //function to add sell order to sql database
+        }
 
-            async function postSellOrderData(data){
-              const response = await fetch("http://localhost:3344/api/sellorder/addsellorder", {
+        async function fetchSellOrderData() {
+            let response = await fetch("http://localhost:3344/api/sellorder/getsellorder");
+            let data = await response.json();
+            for (var i = 0; i < data.length; i++) {
+                var table = document.getElementById("sellorder").getElementsByTagName('tbody')[0];
+                var newRow = table.insertRow(0);
+                cell1 = newRow.insertCell(0);
+                cell1.innerHTML = data[i]["price"];
+                cell2 = newRow.insertCell(1);
+                cell2.innerHTML = data[i]["qty"];
+                cell3 = newRow.insertCell(2);
+                cell3.innerHTML = data[i]["price"] * data[i]["qty"];
+            }
+            console.log(data)
+            return data;
+        }
+
+        //function to add sell order to sql database
+
+        async function postSellOrderData(data) {
+            const response = await fetch("http://localhost:3344/api/sellorder/addsellorder", {
                 method: 'POST',
                 headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: `{
                   "qty": ${data['qty']},
                   "price": ${data['price']},
                   "total_price": ${data['qty'] * data['price']}
                   }`,
-                });
-                
-                response.json().then(data => {
-                  console.log(data);
-                });
-            }
+            });
 
-            async function getSellOrderInsertPosition(data) {
-              const response = await fetch("http://localhost:3344/api/sellorder/insert", {
+            response.json().then(data => {
+                console.log(data);
+            });
+        }
+
+        async function getSellOrderInsertPosition(data) {
+            const response = await fetch("http://localhost:3344/api/sellorder/insert", {
                 method: 'POST',
                 headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: `{
                   "price": ${data['price']},
                   "qty":${data['qty']}
                   }`,
-                });
-               return response.json();
-            }
+            });
+            return response.json();
+        }
 
-            async function main(){
-              await fetchBuyOrderData()
-              await fetchSellOrderData()
-              console.log("Buy order size",document.getElementById('buyorder').rows.length);
-              console.log("Sell order size",document.getElementById('sellorder').rows.length);
-            }
-      </script>
-    </body>
+        async function main() {
+            await fetchBuyOrderData()
+            await fetchSellOrderData()
+            console.log("Buy order size", document.getElementById('buyorder').rows.length);
+            console.log("Sell order size", document.getElementById('sellorder').rows.length);
+        }
+    </script>
+</body>
+
 </html>
