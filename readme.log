@@ -26,3 +26,25 @@
             <label for="buy">Buy</label><br>
             <input type="checkbox" id="sell-btn" name="sell" value="sell">
             <label for="sell">Sell</label><br>
+
+
+
+
+
+
+
+            function onFormSubmit(){
+              var result = readform()
+              if(!document.getElementById('buy-btn').checked && !document.getElementById('sell-btn').checked){
+                alert("Please choose buy or sell order")
+              }
+              if(document.getElementById('buy-btn').checked && document.getElementById('sell-btn').checked){
+                alert("Please choose any one order")
+              }
+              if(document.getElementById('buy-btn').checked){
+                socket.emit("message",insertBuyOrder(result))
+              }
+              if(document.getElementById('sell-btn').checked){
+                socket.emit("message",insertSellOrder(result))
+              }
+            }

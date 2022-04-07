@@ -8,6 +8,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <link rel="stylesheet" href="./style.css"> -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <style>
           body{
             background-color: black;
@@ -58,6 +59,10 @@
           color: white;
           background-color: white;
         }
+        .btn{
+         padding: 15px;
+         margin: 10px ;
+        }
         
         </style>
     </head>
@@ -71,11 +76,16 @@
                 <label for="">Qty</label>
                 <input type="text" autocomplete="off" name="qty" id="qty">
             </div>
-            <input type="checkbox" id="buy-btn" name="buy" value="buy">
+            <!-- <input type="checkbox" id="buy-btn" name="buy" value="buy">
             <label for="buy">Buy</label><br>
             <input type="checkbox" id="sell-btn" name="sell" value="sell">
             <label for="sell">Sell</label><br>
-            <input type="button" value="Place order" onclick="onFormSubmit()">
+            <input type="button" value="Place order" onclick="onFormSubmit()"> -->
+           <div class="btn">
+            <button type="button" class="btn btn-success btn-m" onclick="placeBuyOrder()">Buy</button>
+            <button type="button" class="btn btn-danger btn-m" onclick="placeSellOrder()">Sell</button>
+           </div>
+
        </form>
         <div>
             <h2>
@@ -142,21 +152,18 @@
          })
 
 
-             function onFormSubmit(){
+            function placeBuyOrder(){
               var result = readform()
-              if(!document.getElementById('buy-btn').checked && !document.getElementById('sell-btn').checked){
-                alert("Please choose buy or sell order")
-              }
-              if(document.getElementById('buy-btn').checked && document.getElementById('sell-btn').checked){
-                alert("Please choose any one order")
-              }
-              if(document.getElementById('buy-btn').checked){
-                socket.emit("message",insertBuyOrder(result))
-              }
-              if(document.getElementById('sell-btn').checked){
-                socket.emit("message",insertSellOrder(result))
-              }
+              socket.emit("message",insertBuyOrder(result))
+              clearFields();
             }
+
+            function placeSellOrder(){
+              var result = readform()
+              socket.emit("message",insertSellOrder(result))
+              clearFields();
+            }
+
 
           
 
@@ -242,8 +249,6 @@
             function clearFields(){
               document.getElementById('price').value = ''
               document.getElementById('qty').value=''
-              document.getElementById('buy-btn').checked=false
-              document.getElementById('sell-btn').checked=false
             }
             
 
