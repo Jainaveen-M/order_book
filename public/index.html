@@ -78,6 +78,10 @@
         th {
             background-color: rgb(41, 39, 39);
         }
+        
+        #qty {
+            margin-left: 20px;
+        }
     </style>
 </head>
 
@@ -174,14 +178,27 @@
 
         function placeBuyOrder() {
             var result = readform()
-            socket.emit("message", insertBuyOrder(result))
-            clearFields();
+            if (result['price'].length == 0) {
+                alert("Please fill the price")
+            } else if (result['qty'].length == 0) {
+                alert("Please fill the Qty")
+            } else {
+                socket.emit("message", insertBuyOrder(result))
+                clearFields();
+            }
+
         }
 
         function placeSellOrder() {
             var result = readform()
-            socket.emit("message", insertSellOrder(result))
-            clearFields();
+            if (result['price'].length == 0) {
+                alert("Please fill the price")
+            } else if (result['qty'].length == 0) {
+                alert("Please fill the Qty")
+            } else {
+                socket.emit("message", insertSellOrder(result))
+                clearFields();
+            }
         }
 
 
