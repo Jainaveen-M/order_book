@@ -4,107 +4,97 @@ const db = require('../models')
 const Sell = db.Sell
 
 
-const addSellOrder = async (req,res)=>{
+const addSellOrder = async(req, res) => {
     let data = {
-        id:req.body.id,
-        qty:req.body.qty,
-        price:req.body.price,
-        total_price:req.body.price
+        id: req.body.id,
+        qty: req.body.qty,
+        price: req.body.price,
+        total_price: req.body.price
     }
 
-    try{
-       await insertSellOrderPosition(data)
-    }
-    catch(e){
+    try {
+        await insertSellOrderPosition(data)
+    } catch (e) {
         console.log(e);
     }
     res.status(200).send(data)
-    console.log("sell order details ",data)
+    console.log("sell order details ", data)
 }
 
 
-const getAllSellOrder = async (req,res)=>{
+const getAllSellOrder = async(req, res) => {
     let sell = await Sell.findAll({
         order: [
             ['price', 'asc'],
         ],
-        limit:20
+        limit: 20
     })
-    s =[]
-    for (var i = sell.length-1; i>=0; i--){
+    s = []
+    for (var i = sell.length - 1; i >= 0; i--) {
         s.push(sell[i]['dataValues'])
     }
     res.status(200).send(s)
 }
 
 
-const insertSellOrderPosition = async (data)=>{
+const insertSellOrderPosition = async(data) => {
     return Sell.count({ where: { price: data.price } })
-      .then(async (count) =>{
-        if (count != 0) {
-          console.log("Price is already present")
-          var prevQty = await Sell.findOne({where : {price:data.price}});
-          console.log("======= prev values ==== ",prevQty)
-          const qty = prevQty.qty+data.qty;
-          await Sell.update(
-              {
-                  qty :qty,
-                    total_price:qty*data.price
-                }
-              ,{
-                  where: {
-                      price:data.price
+        .then(async(count) => {
+            if (count != 0) {
+                console.log("Price is already present")
+                var prevQty = await Sell.findOne({ where: { price: data.price } });
+                console.log("======= prev values ==== ", prevQty)
+                const qty = prevQty.qty + data.qty;
+                await Sell.update({
+                    qty: qty,
+                    total_price: qty * data.price
+                }, {
+                    where: {
+                        price: data.price
                     }
                 })
-          return false;
-        }
-        console.log("Price is not present in the table")
-        Sell.create(data)
-        return true;
-    });
+                return false;
+            }
+            console.log("Price is not present in the table")
+            Sell.create(data)
+            return true;
+        });
 }
 
 
-const insertPosition =async (req,res)=>{
+const insertPosition = async(req, res) => {
     let sell = await Sell.findAll({
-        order: [
-            ['price', 'asc'],
-        ],
-        limit:20
-    })
-    // TODO: to find the prev min and find the index and add it to the row
-    s =[]
-    for (var i = 0; i < sell.length && i<20; i++){
+            order: [
+                ['price', 'asc'],
+            ],
+            limit: 20
+        })
+        // TODO: to find the prev min and find the index and add it to the row
+    s = []
+    for (var i = 0; i < sell.length && i < 20; i++) {
         s.push(sell[i]['dataValues'])
-        
+
     }
-    p =[];
-    for(var i=0;i<s.length;i++){
+    p = [];
+    for (var i = 0; i < s.length; i++) {
         p.push(s[i].price)
     }
-    console.log("===Price === ",p);
-    console.log("p.indexOf(req.body.price)",p.indexOf(req.body.price));
-    if(p.indexOf(req.body.price)==-1){
-    for(var i=0;i<s.length;i++){
-        console.log("=== after price === ",s[i]);
+    console.log("===Price === ", p);
+    console.log("p.indexOf(req.body.price)", p.indexOf(req.body.price));
+    if (p.indexOf(req.body.price) == -1) {
+        s.splice(locationOf(req.body.price, s) + 1, 0, req.body.price);
+
+        console.log("======= index of the new element ======  ", s.indexOf(req.body.price))
+        data = {
+            "insert_position": s.indexOf(req.body.price),
+            "status": 0
+        }
+    } else {
+        data = {
+            "insert_position": p.indexOf(req.body.price),
+            "status": 1
+        }
     }
-    s.splice(locationOf(req.body.price, s) + 1, 0, req.body.price);
-    for(var i=0;i<s.length;i++){
-        console.log("=== after price === ",s[i]);
-    }
-    console.log("After ",s);
-    console.log("======= index of the new element ======  ",s.indexOf(req.body.price))
-    data = {
-        "insert_position":s.indexOf(req.body.price),
-        "status":0
-    }
-   }
-   else{
-    data = {
-        "insert_position":p.indexOf(req.body.price),
-        "status":1
-    }
-   }
     res.send(data)
 }
 
@@ -117,19 +107,19 @@ function locationOf(el, arr, st, en) {
             return i;
     }
     return en;
-  }
+}
 
-  const deleteSellOrder = async(req,res)=>{
-     Sell.destroy({
+const deleteSellOrder = async(req, res) => {
+    Sell.destroy({
         where: {
             id: parseInt(req.body.id)
         }
     })
-    res.status(200).send({"message":"order deleted successfully..."})
+    res.status(200).send({ "message": "order deleted successfully..." })
 }
-  module.exports = {
-      addSellOrder,
-      getAllSellOrder,
-      insertPosition,
-      deleteSellOrder
-  }
+module.exports = {
+    addSellOrder,
+    getAllSellOrder,
+    insertPosition,
+    deleteSellOrder
+}

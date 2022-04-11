@@ -1,0 +1,5 @@
+storage = [];
+
+module.exports = {
+    storage
+}
