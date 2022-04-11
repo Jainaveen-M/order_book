@@ -271,7 +271,7 @@
                 cell2 = newRow.insertCell(1);
                 cell2.innerHTML = qty;
                 cell3 = newRow.insertCell(2);
-                cell3.innerHTML = price * qty;
+                cell3.innerHTML = parseFloat(parseFloat(price * qty).toFixed(6));
             }
             if (data['status'] == 1 && table_size < 22) {
                 var price = isFloat(data["price"]) ? parseFloat(parseFloat(data["price"]).toFixed(4)) : parseInt(data["price"]);
@@ -412,7 +412,7 @@
                 cell2 = newRow.insertCell(1);
                 cell2.innerHTML = qty;
                 cell3 = newRow.insertCell(2);
-                cell3.innerHTML = parseFloat(price * qty).toFixed(6);
+                cell3.innerHTML = parseFloat(parseFloat(price * qty).toFixed(6));
             }
             if (data['status'] == 1 && table_size < 22) {
                 var price = isFloat(data["price"]) ? parseFloat(parseFloat(data["price"]).toFixed(4)) : parseInt(data["price"]);
