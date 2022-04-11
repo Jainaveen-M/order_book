@@ -261,8 +261,8 @@
                 if (check_value > data['price'] && table_size == 21) {
                     return;
                 }
-                var price = isFloat(data["price"]) ? parseFloat(data["price"]) : parseInt(data["price"]);
-                var qty = isFloat(data["qty"]) ? parseFloat(data["qty"]) : parseInt(data["qty"]);
+                var price = isFloat(data["price"]) ? parseFloat(parseFloat(data["price"]).toFixed(4)) : parseInt(data["price"]);
+                var qty = isFloat(data["qty"]) ? parseFloat(parseFloat(data["qty"]).toFixed(4)) : parseInt(data["qty"]);
                 console.log("inser message", data)
                 console.log("insert postion ===", insert_index);
                 var newRow = table.insertRow(insert_index);
@@ -274,10 +274,10 @@
                 cell3.innerHTML = price * qty;
             }
             if (data['status'] == 1 && table_size < 22) {
-                var price = isFloat(data["price"]) ? parseFloat(data["price"]) : parseInt(data["price"]);
+                var price = isFloat(data["price"]) ? parseFloat(parseFloat(data["price"]).toFixed(4)) : parseInt(data["price"]);
                 var prevqty = document.getElementById('buyorder').getElementsByTagName('tr')[insert_index + 1].getElementsByTagName('td')[1].innerText
-                const dprevqty = isFloat(prevqty) ? parseFloat(prevqty) : parseInt(prevqty);
-                const dqty = isFloat(data["qty"]) ? parseFloat(data["qty"]) : parseInt(data["qty"]);
+                const dprevqty = isFloat(prevqty) ? parseFloat(parseFloat(prevqty).toFixed(4)) : parseInt(prevqty);
+                const dqty = isFloat(data["qty"]) ? parseFloat(parseFloat(data["qty"]).toFixed(4)) : parseInt(data["qty"]);
                 console.log("====== prev qty ==== ", prevqty, typeof(dprevqty), typeof(parseInt(dqty)))
                 document.getElementById("buyorder").deleteRow(insert_index + 1);
                 console.log("inserttt message", data)
@@ -288,7 +288,7 @@
                 cell2 = newRow.insertCell(1);
                 cell2.innerHTML = dqty + dprevqty;
                 cell3 = newRow.insertCell(2);
-                cell3.innerHTML = price * (dqty + dprevqty);
+                cell3.innerHTML = parseFloat(price * (dqty + dprevqty)).toFixed(6);
             }
         }
 
@@ -307,14 +307,14 @@
             for (var i = 0; i < data.length; i++) {
                 var table = document.getElementById("buyorder").getElementsByTagName('tbody')[0];
                 var newRow = table.insertRow(0);
-                var price = isFloat(data[i]["price"]) ? parseFloat(data[i]["price"]) : parseInt(data[i]["price"]);
-                var qty = isFloat(data[i]["qty"]) ? parseFloat(data[i]["qty"]) : parseInt(data[i]["qty"]);
+                var price = isFloat(data[i]["price"]) ? parseFloat(parseFloat(data[i]["price"]).toFixed(4)) : parseInt(data[i]["price"]);
+                var qty = isFloat(data[i]["qty"]) ? parseFloat(parseFloat(data[i]["qty"]).toFixed(4)) : parseInt(data[i]["qty"]);
                 cell1 = newRow.insertCell(0);
                 cell1.innerHTML = price
                 cell2 = newRow.insertCell(1);
                 cell2.innerHTML = qty
                 cell3 = newRow.insertCell(2);
-                cell3.innerHTML = price * qty
+                cell3.innerHTML = parseFloat(parseFloat(price * qty).toFixed(6))
             }
             console.log(data)
             return data;
@@ -402,8 +402,8 @@
                 if (check_value < data['price'] && table_size == 21) {
                     return;
                 }
-                var price = isFloat(data["price"]) ? parseFloat(data["price"]) : parseInt(data["price"]);
-                var qty = isFloat(data["qty"]) ? parseFloat(data["qty"]) : parseInt(data["qty"]);
+                var price = isFloat(data["price"]) ? parseFloat(parseFloat(data["price"]).toFixed(4)) : parseInt(data["price"]);
+                var qty = isFloat(data["qty"]) ? parseFloat(parseFloat(data["qty"]).toFixed(4)) : parseInt(data["qty"]);
                 console.log("inser message", data)
                 console.log("insert postion ===", insert_index);
                 var newRow = table.insertRow(insert_index);
@@ -412,14 +412,14 @@
                 cell2 = newRow.insertCell(1);
                 cell2.innerHTML = qty;
                 cell3 = newRow.insertCell(2);
-                cell3.innerHTML = price * qty;
+                cell3.innerHTML = parseFloat(price * qty).toFixed(6);
             }
             if (data['status'] == 1 && table_size < 22) {
-                var price = isFloat(data["price"]) ? parseFloat(data["price"]) : parseInt(data["price"]);
+                var price = isFloat(data["price"]) ? parseFloat(parseFloat(data["price"]).toFixed(4)) : parseInt(data["price"]);
                 var prevqty = document.getElementById('sellorder').getElementsByTagName('tr')[insert_index + 1].getElementsByTagName('td')[1].innerText;
                 console.log("====== prev qty ==== ", prevqty)
-                const dprevqty = isFloat(prevqty) ? parseFloat(prevqty) : parseInt(prevqty);
-                const dqty = isFloat(data["qty"]) ? parseFloat(data["qty"]) : parseInt(data["qty"]);
+                const dprevqty = isFloat(prevqty) ? parseFloat(parseFloat(prevqty).toFixed(4)) : parseInt(prevqty);
+                const dqty = isFloat(data["qty"]) ? parseFloat(parseFloat(data["qty"]).toFixed(4)) : parseInt(data["qty"]);
                 console.log("====== prev qty ==== ", prevqty, typeof(dprevqty), typeof(parseInt(dqty)))
                 document.getElementById("sellorder").deleteRow(insert_index + 1);
                 console.log("insert message", data)
@@ -430,7 +430,7 @@
                 cell2 = newRow.insertCell(1);
                 cell2.innerHTML = dqty + dprevqty;
                 cell3 = newRow.insertCell(2);
-                cell3.innerHTML = price * (dqty + dprevqty);
+                cell3.innerHTML = parseFloat(price * (dqty + dprevqty)).toFixed(6)
             }
         }
 
@@ -440,14 +440,14 @@
             for (var i = 0; i < data.length; i++) {
                 var table = document.getElementById("sellorder").getElementsByTagName('tbody')[0];
                 var newRow = table.insertRow(0);
-                var price = isFloat(data[i]["price"]) ? parseFloat(data[i]["price"]) : parseInt(data[i]["price"]);
-                var qty = isFloat(data[i]["qty"]) ? parseFloat(data[i]["qty"]) : parseInt(data[i]["qty"]);
+                var price = isFloat(data[i]["price"]) ? parseFloat(parseFloat(data[i]["price"]).toFixed(4)) : parseInt(data[i]["price"]);
+                var qty = isFloat(data[i]["qty"]) ? parseFloat(parseFloat(data[i]["qty"]).toFixed(4)) : parseInt(data[i]["qty"]);
                 cell1 = newRow.insertCell(0);
                 cell1.innerHTML = price
                 cell2 = newRow.insertCell(1);
                 cell2.innerHTML = qty
                 cell3 = newRow.insertCell(2);
-                cell3.innerHTML = price * qty
+                cell3.innerHTML = parseFloat(parseFloat(price * qty).toFixed(6))
             }
             console.log(data)
             return data;
