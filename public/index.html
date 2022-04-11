@@ -252,7 +252,8 @@
                 insert_index = insert_index - 1
                 if (check_value < data['price'] && table_size == 21) {
                     console.log("======= cell value ======", check_value);
-                    document.getElementById("buyorder").deleteRow(table_size - 1);
+                    document.getElementById("buyorder").deleteRo(table_size - 1);
+                    z
                 }
                 if (check_value > data['price'] && table_size < 22) {
                     insert_index = insert_index + 1;
@@ -383,7 +384,7 @@
 
             //check values in sell order
             var oTable = document.getElementById("sellorder")
-            var oCells = oTable.rows.item(table_size - 1).cells;
+            var oCells = oTable.rows.item(0).cells;
             console.log(">>>>>>>> ocellllllll <<<<<<", oCells[0].firstChild.data)
             var check_value = oCells[0].firstChild.data;
 
