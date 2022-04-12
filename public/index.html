@@ -103,6 +103,7 @@
         <div class="btn">
             <button type="button" class="btn btn-success btn-s " onclick="placeBuyOrder()">Buy</button>
             <button type="button" class="btn btn-danger btn-s" onclick="placeSellOrder()">Sell</button>
+            <button type="button" class="btn btn-warning btn-s" onclick="animate()">refresh</button>
         </div>
 
     </form>
@@ -114,15 +115,12 @@
     <table class="list" id="buyorder">
         <thead>
             <tr>
-
-                <th class="header">Price</th>
+                <th class="header" id="price">Price</th>
                 <th class="header">Qty</th>
                 <th class="header">Total</th>
-
-
             </tr>
         </thead>
-        <tbody>
+        <tbody id="tbodybuy">
             <!-- <tr data-index="2" >
               </tr> -->
         </tbody>
@@ -147,11 +145,19 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://localhost:3344/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         //socket init
         var socket = io()
 
         console.log(socket)
+
+        //jquery
+        function refresh() {
+            $('#tbodybuy').empty();
+            console.log("refresh function called...")
+            $('#burorder').fadeIn('slow').load(fetchBuyOrderData());
+        }
         socket.on('message', (data) => {
             console.log("++++ event received ++++")
             console.log(" ======= message =======", data)
@@ -174,7 +180,6 @@
             console.log(" ======= socket sellorder =======", data)
             await processSellOrder(data);
         })
-
 
         function placeBuyOrder() {
             var result = readform()

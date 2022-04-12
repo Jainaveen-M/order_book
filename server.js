@@ -37,12 +37,14 @@ socketIO.on("connection", (userSocket) => {
     })
 })
 
-
+var count = 0;
 socketIO.on('connection', (client) => {
     console.log('Connected...', client.id);
     // console.log('Connected broadcast', client.broadcast);
 
-
+    count += 1;
+    console.log("======= user count =====", count);
+    socketIO.emit('usercount', count);
     //listens for new messages coming in
     client.on('message', (data) => {
         console.log("message", data);
