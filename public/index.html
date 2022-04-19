@@ -257,8 +257,7 @@
                 insert_index = insert_index - 1
                 if (check_value < data['price'] && table_size == 21) {
                     console.log("======= cell value ======", check_value);
-                    document.getElementById("buyorder").deleteRo(table_size - 1);
-                    z
+                    document.getElementById("buyorder").deleteRow(table_size - 1);
                 }
                 if (check_value > data['price'] && table_size < 22) {
                     insert_index = insert_index + 1;
