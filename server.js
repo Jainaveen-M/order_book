@@ -16,7 +16,8 @@ const sellrouter = require('./routes/sellorderRouter.js')
 app.use('/api/sellorder', sellrouter)
 const allorders = require('./routes/orderRouter.js')
 app.use('/api/allorder', allorders)
-
+const ordertable = require('./routes/ordertableRouter.js')
+app.use('/api/ordertable', ordertable)
 
 //port
 

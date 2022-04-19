@@ -10,10 +10,19 @@ module.exports = (sequelize, DataTypes) => {
                     notEmpty: true,
                 }
             },
-            last_update: {
-                type: 'TIMESTAMP',
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-                allowNull: false
+            qty: {
+                type: DataTypes.DOUBLE,
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                }
+            },
+            price: {
+                type: DataTypes.DOUBLE,
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                }
             },
         }
     );

@@ -103,7 +103,7 @@
         <div class="btn">
             <button type="button" class="btn btn-success btn-s " onclick="placeBuyOrder()">Buy</button>
             <button type="button" class="btn btn-danger btn-s" onclick="placeSellOrder()">Sell</button>
-            <button type="button" class="btn btn-warning btn-s" onclick="animate()">refresh</button>
+            <!-- <button type="button" class="btn btn-warning btn-s" onclick="animate()">refresh</button> -->
         </div>
 
     </form>
@@ -162,6 +162,10 @@
             console.log("++++ event received ++++")
             console.log(" ======= message =======", data)
                 //document.location.reload(); 
+        })
+
+        socket.on('connection', (data) => {
+            console.log("connected in Ui ".data.id);
         })
         socket.on('delete', (data) => {
             console.log("++++ delete event received ++++")
