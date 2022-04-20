@@ -103,7 +103,7 @@
         <div class="btn">
             <button type="button" class="btn btn-success btn-s " onclick="placeBuyOrder()">Buy</button>
             <button type="button" class="btn btn-danger btn-s" onclick="placeSellOrder()">Sell</button>
-            <!-- <button type="button" class="btn btn-warning btn-s" onclick="animate()">refresh</button> -->
+            <!-- <button type="button" class="btn btn-warning btn-s" onclick="postOrderTable()">refresh</button> -->
         </div>
 
     </form>
@@ -147,9 +147,10 @@
     <script src="http://localhost:3344/socket.io/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
+        var buyorderHash = '';
+        var sellorderHash = '';
         //socket init
         var socket = io()
-
         console.log(socket)
 
         //jquery
@@ -209,7 +210,6 @@
                 clearFields();
             }
         }
-
 
 
 
@@ -344,7 +344,9 @@
                   }`,
             });
 
-            response.json().then(data => {
+            response.json().then(async(data) => {
+                var uuid = getTimeStamp();
+                await postOrderTable(data, uuid);
                 console.log(data);
             });
         }
@@ -506,6 +508,50 @@
 
         function isFloat(n) {
             return !Number.isInteger(n)
+        }
+
+        async function getUUID() {
+            let response = await fetch("http://localhost:3344/api/ordertable/getUUID");
+            let data = await response.json();
+            console.log("uuid data ", data['uuid']);
+            return data;
+        }
+
+
+        async function postOrderTable(data, uuid) {
+            const response = await fetch("http://localhost:3344/api/ordertable/addorder", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: `{
+                  "uuid": ${String(uuid)},
+                  "qty": ${data['qty']},
+                  "price": ${data['price']}
+                  }`,
+            });
+
+            response.json().then(data => console.log(data)).catch(e => console.log(e))
+        }
+
+        function getTimeStamp() {
+            // to get the date
+            var d = new Date();
+            var year = d.getFullYear()
+            var month = d.getMonth() + 1;
+            var date = d.getDate()
+            var timestamp = year + '' + (month) + "" + date + '' + d.getHours() + '' + d.getMinutes() + '' + d.getSeconds();
+            console.log("time stamp", timestamp)
+            return timestamp
+        }
+
+        function CreateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0,
+                    v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
         }
     </script>
 </body>

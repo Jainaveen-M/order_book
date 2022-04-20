@@ -5,23 +5,22 @@ const {
     v4: uuidv4
 } = require('uuid');
 
-
-
-
-
-
 const orderTable = db.Ordertable
 
 
 const addorder = async(req, res) => {
     let data = {
-        type: req.body.type,
+        uuid: req.body.uuid,
         qty: req.body.qty,
         price: req.body.price
     }
-    await orderTable.create(data);
-    res.status(200).send(data)
-    console.log("buy order details ", data)
+    try {
+        await orderTable.create(data);
+    } catch (e) {
+        console.log(e);
+    }
+
+    res.status(200).send({ "message": "order added successfully" })
 }
 
 const getorder = async(req, res) => {

@@ -10,6 +10,13 @@ module.exports = (sequelize, DataTypes) => {
                     notEmpty: true,
                 }
             },
+            uuid: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                }
+            },
             qty: {
                 type: DataTypes.DOUBLE,
                 allowNull: false,
