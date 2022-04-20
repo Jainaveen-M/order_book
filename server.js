@@ -41,8 +41,11 @@ socketIO.on("connection", (userSocket) => {
 var count = 0;
 socketIO.on('connection', (client) => {
     console.log('Connected...', client.id);
-    // console.log('Connected broadcast', client.broadcast);
-
+    console.log('Connected broadcast', client.broadcast);
+    client.on('connect', (data) => {
+        console.log("connect === ", client.id);
+        socketIO.emit('connect message', data);
+    })
     count += 1;
     console.log("======= user count =====", count);
     socketIO.emit('usercount', count);

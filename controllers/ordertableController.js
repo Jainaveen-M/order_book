@@ -1,9 +1,11 @@
 const req = require('express/lib/request')
 const db = require('../models')
+const Sequelize = require('sequelize');
 
 const {
     v4: uuidv4
 } = require('uuid');
+const ordertable = require('../models/ordertable');
 
 const orderTable = db.Ordertable
 
@@ -12,7 +14,8 @@ const addorder = async(req, res) => {
     let data = {
         uuid: req.body.uuid,
         qty: req.body.qty,
-        price: req.body.price
+        price: req.body.price,
+        ordertype: req.body.ordertype
     }
     try {
         await orderTable.create(data);
@@ -47,8 +50,70 @@ const getUUID = async(req, res) => {
     res.status(200).send(data);
 }
 
+
+const getBuyOrderCurrentHash = async(req, res) => {
+    let order = await orderTable.findAll({
+        attributes: [
+            [Sequelize.fn('MAX', Sequelize.col('id')), 'id'],
+        ],
+        order: [
+            ['id', 'desc'],
+        ],
+        where:{
+            ordertype:1
+        },
+        group: ['id'],
+        limit: 1,
+    });
+
+
+    let hash = await orderTable.findAll({
+        where: {
+            id: order[0]['dataValues'].id
+        }
+    })
+    let data = {
+        hash: hash[0]['dataValues'].uuid,
+        id: hash[0]['dataValues'].id
+    }
+    res.status(200).send(data)
+}
+
+
+
+const getSellOrderCurrentHash = async(req, res) => {
+    let order = await orderTable.findAll({
+        attributes: [
+            [Sequelize.fn('MAX', Sequelize.col('id')), 'id'],
+        ],
+        where:{
+            ordertype:0
+        },
+        order: [
+            ['id', 'desc'],
+        ],
+        group: ['id'],
+        limit: 1,
+    });
+
+
+    let hash = await orderTable.findAll({
+        where: {
+            id: order[0]['dataValues'].id
+        }
+    })
+    let data = {
+        hash: hash[0]['dataValues'].uuid,
+        id: hash[0]['dataValues'].id
+    }
+    res.status(200).send(data)
+}
+
+
 module.exports = {
     addorder,
     getorder,
-    getUUID
+    getUUID,
+    getBuyOrderCurrentHash,
+    getSellOrderCurrentHash
 }

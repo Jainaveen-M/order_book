@@ -10,4 +10,9 @@ router.get('/getorder', ordertableController.getorder)
 
 router.get('/getUUID', ordertableController.getUUID)
 
+router.get('/getbuyordercurrenthash', ordertableController.getBuyOrderCurrentHash)
+
+router.get('/getsellordercurrenthash', ordertableController.getSellOrderCurrentHash)
+
+
 module.exports = router

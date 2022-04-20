@@ -31,6 +31,13 @@ module.exports = (sequelize, DataTypes) => {
                     notEmpty: true,
                 }
             },
+            ordertype: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                }
+            },
         }
     );
     return Ordertable;

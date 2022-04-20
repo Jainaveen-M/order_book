@@ -85,7 +85,7 @@
     </style>
 </head>
 
-<body onload="main()">
+<body onload="">
     <form action="" onsubmit="">
         <div>
             <label for="">Price</label>
@@ -103,7 +103,8 @@
         <div class="btn">
             <button type="button" class="btn btn-success btn-s " onclick="placeBuyOrder()">Buy</button>
             <button type="button" class="btn btn-danger btn-s" onclick="placeSellOrder()">Sell</button>
-            <!-- <button type="button" class="btn btn-warning btn-s" onclick="postOrderTable()">refresh</button> -->
+            <button type="button" class="btn btn-warning btn-s" onclick="refreshBuyOrderTable()">refresh buy </button>
+            <button type="button" class="btn btn-warning btn-s" onclick="refreshSellOrderTable()">refresh sell</button>
         </div>
 
     </form>
@@ -138,7 +139,7 @@
                 <th class="header">Total</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody  id="tbodysell">
 
         </tbody>
     </table>
@@ -146,6 +147,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://localhost:3344/socket.io/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.4.1.min.js"></script>
+
     <script>
         var buyorderHash = '';
         var sellorderHash = '';
@@ -153,12 +156,47 @@
         var socket = io()
         console.log(socket)
 
-        //jquery
-        function refresh() {
-            $('#tbodybuy').empty();
-            console.log("refresh function called...")
-            $('#burorder').fadeIn('slow').load(fetchBuyOrderData());
+        async function main() {
+            await fetchBuyOrderData()
+            await fetchSellOrderData()
+            buyorderHash = await getBuyOrderCurrentHash();
+            sellorderHash = await getSellOrderCurrentHash();
+            console.log("Main method hash ", buyorderHash)
+            console.log("Buy order size", document.getElementById('buyorder').rows.length);
+            console.log("Sell order size", document.getElementById('sellorder').rows.length);
         }
+
+        // connect event 
+        socket.on("connect", async() => {
+            console.log("socket id ", socket.id);
+            await main();
+            var checkBuyHash = await getBuyOrderCurrentHash();
+            var checkSellHash = await getSellOrderCurrentHash();
+            console.log("buyorder hash",buyorderHash);
+            console.log("get the current buyorderhash",checkBuyHash);
+            console.log("sellorder hash",sellorderHash);
+            console.log("get the current sellorderhash",checkSellHash);
+            if (checkBuyHash != buyorderHash) {
+                refreshBuyOrderTable()
+            }
+            if (checkSellHash != sellorderHash) {
+                refreshBuyOrderTable()
+            }
+        });
+
+        //jquery
+        function refreshBuyOrderTable() {
+            $('#tbodybuy').empty();
+            console.log("refresh function called for buy ...")
+            $('#buyorder').fadeIn('fast').load(fetchBuyOrderData());
+        }
+
+        function refreshSellOrderTable() {
+            $('#tbodysell').empty();
+            console.log("refresh function called for sell...")
+            $('#sellorder').fadeIn('fast').load(fetchSellOrderData());
+        }
+
         socket.on('message', (data) => {
             console.log("++++ event received ++++")
             console.log(" ======= message =======", data)
@@ -178,12 +216,16 @@
             console.log("##### buyorder event received #######")
             console.log(" ======= socket buyorder =======", data)
             await processBuyOrder(data);
+            // assign a hash value when buy order received
+            buyorderHash = await getBuyOrderCurrentHash()
         })
 
         socket.on('sellorder', async(data) => {
             console.log("##### sellorder event received #######")
             console.log(" ======= socket sellorder =======", data)
             await processSellOrder(data);
+            // assign a hash value when sell order received
+            sellorderHash = await getSellOrderCurrentHash()
         })
 
         function placeBuyOrder() {
@@ -249,8 +291,7 @@
             var table_size = document.getElementById('buyorder').rows.length;
             console.log(">>>>> table size <<<< ", table_size)
             console.log("===== result =====", data)
-
-            //contion to check the values in cells
+                //contion to check the values in cells
             var oTable = document.getElementById("buyorder")
             var oCells = oTable.rows.item(table_size - 1).cells;
             console.log(">>>>>>>> ocellllllll <<<<<<", oCells[0].firstChild.data)
@@ -346,8 +387,10 @@
 
             response.json().then(async(data) => {
                 var uuid = getTimeStamp();
-                await postOrderTable(data, uuid);
+                await postOrderTable(data, uuid,1);
                 console.log(data);
+                buyorderHash = await getBuyOrderCurrentHash();
+                console.log("=== buy orderhash ===", buyorderHash);
             });
         }
 
@@ -479,8 +522,12 @@
                   }`,
             });
 
-            response.json().then(data => {
+            response.json().then(async data => {
                 console.log(data);
+                var uuid = getTimeStamp();
+                await postOrderTable(data, uuid,0);
+                sellorderHash = await getSellOrderCurrentHash();
+                console.log("=== sell orderhash ===", sellorderHash);
             });
         }
 
@@ -499,12 +546,6 @@
             return response.json();
         }
 
-        async function main() {
-            await fetchBuyOrderData()
-            await fetchSellOrderData()
-            console.log("Buy order size", document.getElementById('buyorder').rows.length);
-            console.log("Sell order size", document.getElementById('sellorder').rows.length);
-        }
 
         function isFloat(n) {
             return !Number.isInteger(n)
@@ -518,7 +559,7 @@
         }
 
 
-        async function postOrderTable(data, uuid) {
+        async function postOrderTable(data, uuid,ordertype) {
             const response = await fetch("http://localhost:3344/api/ordertable/addorder", {
                 method: 'POST',
                 headers: {
@@ -528,7 +569,8 @@
                 body: `{
                   "uuid": ${String(uuid)},
                   "qty": ${data['qty']},
-                  "price": ${data['price']}
+                  "price": ${data['price']},
+                  "ordertype":${ordertype}
                   }`,
             });
 
@@ -541,9 +583,23 @@
             var year = d.getFullYear()
             var month = d.getMonth() + 1;
             var date = d.getDate()
-            var timestamp = year + '' + (month) + "" + date + '' + d.getHours() + '' + d.getMinutes() + '' + d.getSeconds();
+            var timestamp = year + '' + month + "" + date + '' + d.getHours() + '' + d.getMinutes() + '' + d.getSeconds();
             console.log("time stamp", timestamp)
             return timestamp
+        }
+
+        async function getBuyOrderCurrentHash() {
+            let response = await fetch("http://localhost:3344/api/ordertable/getbuyordercurrenthash");
+            let data = await response.json();
+            console.log(data);
+            return data['hash'];
+        }
+
+        async function getSellOrderCurrentHash() {
+            let response = await fetch("http://localhost:3344/api/ordertable/getsellordercurrenthash");
+            let data = await response.json();
+            console.log(data);
+            return data['hash'];
         }
 
         function CreateUUID() {
