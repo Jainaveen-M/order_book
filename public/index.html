@@ -85,7 +85,7 @@
     </style>
 </head>
 
-<body onload="">
+<body onload="main()">
     <form action="" onsubmit="">
         <div>
             <label for="">Price</label>
@@ -103,6 +103,7 @@
         <div class="btn">
             <button type="button" class="btn btn-success btn-s " onclick="placeBuyOrder()">Buy</button>
             <button type="button" class="btn btn-danger btn-s" onclick="placeSellOrder()">Sell</button>
+            <button type="button" class="btn btn-warning btn-s" onclick="">reconnect</button>
             <!-- <button type="button" class="btn btn-warning btn-s" onclick="refreshBuyOrderTable()">refresh buy </button>
             <button type="button" class="btn btn-warning btn-s" onclick="refreshSellOrderTable()">refresh sell</button> -->
         </div>
@@ -169,18 +170,17 @@
         // connect event 
         socket.on("connect", async() => {
             console.log("socket id ", socket.id);
-            await main();
             var checkBuyHash = await getBuyOrderCurrentHash();
             var checkSellHash = await getSellOrderCurrentHash();
             console.log("buyorder hash",buyorderHash);
             console.log("get the current buyorderhash",checkBuyHash);
             console.log("sellorder hash",sellorderHash);
             console.log("get the current sellorderhash",checkSellHash);
-            if (checkBuyHash != buyorderHash) {
+            if (checkBuyHash != buyorderHash && buyorderHash!="") {
                 refreshBuyOrderTable()
             }
-            if (checkSellHash != sellorderHash) {
-                refreshBuyOrderTable()
+            if (checkSellHash != sellorderHash  && sellorderHash!="") {
+                refreshSellOrderTable()
             }
         });
 
@@ -203,9 +203,6 @@
                 //document.location.reload(); 
         })
 
-        socket.on('connection', (data) => {
-            console.log("connected in Ui ".data.id);
-        })
         socket.on('delete', (data) => {
             console.log("++++ delete event received ++++")
             console.log(" ======= message =======", data)
@@ -337,7 +334,7 @@
                 cell2 = newRow.insertCell(1);
                 cell2.innerHTML = dqty + dprevqty;
                 cell3 = newRow.insertCell(2);
-                cell3.innerHTML = parseFloat(price * (dqty + dprevqty)).toFixed(6);
+                cell3.innerHTML = parseFloat(parseFloat(price * (dqty + dprevqty)).toFixed(6));
             }
         }
 
@@ -485,7 +482,7 @@
                 cell2 = newRow.insertCell(1);
                 cell2.innerHTML = dqty + dprevqty;
                 cell3 = newRow.insertCell(2);
-                cell3.innerHTML = parseFloat(price * (dqty + dprevqty)).toFixed(6)
+                cell3.innerHTML = parseFloat(parseFloat(price * (dqty + dprevqty)).toFixed(6));
             }
         }
 
