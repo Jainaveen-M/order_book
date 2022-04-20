@@ -103,8 +103,8 @@
         <div class="btn">
             <button type="button" class="btn btn-success btn-s " onclick="placeBuyOrder()">Buy</button>
             <button type="button" class="btn btn-danger btn-s" onclick="placeSellOrder()">Sell</button>
-            <button type="button" class="btn btn-warning btn-s" onclick="refreshBuyOrderTable()">refresh buy </button>
-            <button type="button" class="btn btn-warning btn-s" onclick="refreshSellOrderTable()">refresh sell</button>
+            <!-- <button type="button" class="btn btn-warning btn-s" onclick="refreshBuyOrderTable()">refresh buy </button>
+            <button type="button" class="btn btn-warning btn-s" onclick="refreshSellOrderTable()">refresh sell</button> -->
         </div>
 
     </form>
@@ -372,6 +372,8 @@
         //function to add buy order to sql database
 
         async function postData(data) {
+            var t_price = data['qty'] * data['price'];
+            var total_price = isFloat(t_price) ? parseFloat(parseFloat(t_price).toFixed(6)) : parseInt(t_price);
             const response = await fetch("http://localhost:3344/api/buyorder/addbuyorder", {
                 method: 'POST',
                 headers: {
@@ -381,7 +383,7 @@
                 body: `{
                   "qty": ${data['qty']},
                   "price": ${data['price']},
-                  "total_price": ${data['qty'] * data['price']}
+                  "total_price": ${total_price}
                   }`,
             });
 
@@ -509,6 +511,8 @@
         //function to add sell order to sql database
 
         async function postSellOrderData(data) {
+            var t_price = data['qty'] * data['price'];
+            var total_price = isFloat(t_price) ? parseFloat(parseFloat(t_price).toFixed(6)) : parseInt(t_price);
             const response = await fetch("http://localhost:3344/api/sellorder/addsellorder", {
                 method: 'POST',
                 headers: {
@@ -518,7 +522,7 @@
                 body: `{
                   "qty": ${data['qty']},
                   "price": ${data['price']},
-                  "total_price": ${data['qty'] * data['price']}
+                  "total_price": ${total_price}
                   }`,
             });
 
@@ -574,7 +578,7 @@
                   }`,
             });
 
-            response.json().then(data => console.log(data)).catch(e => console.log(e))
+            response.json().then(data => console.log("post order table hash ",data)).catch(e => console.log(e))
         }
 
         function getTimeStamp() {
