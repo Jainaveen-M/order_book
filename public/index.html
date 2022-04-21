@@ -162,7 +162,8 @@
             await fetchSellOrderData()
             buyorderHash = await getBuyOrderCurrentHash();
             sellorderHash = await getSellOrderCurrentHash();
-            console.log("Main method hash ", buyorderHash)
+            console.log("buyorder hash",buyorderHash);
+            console.log("sellorder hash",sellorderHash);
             console.log("Buy order size", document.getElementById('buyorder').rows.length);
             console.log("Sell order size", document.getElementById('sellorder').rows.length);
         }
@@ -171,10 +172,8 @@
         socket.on("connect", async() => {
             console.log("socket id ", socket.id);
             var checkBuyHash = await getBuyOrderCurrentHash();
-            var checkSellHash = await getSellOrderCurrentHash();
-            console.log("buyorder hash",buyorderHash);
+            var checkSellHash = await getSellOrderCurrentHash();   
             console.log("get the current buyorderhash",checkBuyHash);
-            console.log("sellorder hash",sellorderHash);
             console.log("get the current sellorderhash",checkSellHash);
             if (checkBuyHash != buyorderHash && buyorderHash!="") {
                 refreshBuyOrderTable()
@@ -609,7 +608,7 @@
                     v = c == 'x' ? r : (r & 0x3 | 0x8);
                 return v.toString(16);
             });
-        }
+        } 
     </script>
 </body>
 
