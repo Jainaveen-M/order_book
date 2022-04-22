@@ -100,7 +100,7 @@ socketIO.on('connection', (client) => {
 
 
 var port = process.env.PORT || 3344;
-http.listen(port, function(err) {
+http.listen(port,"192.168.0.248", function(err) {
     if (err) console.log(err);
     console.log('Listening on port', port);
 });

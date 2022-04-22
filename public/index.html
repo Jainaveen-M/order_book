@@ -103,7 +103,8 @@
         <div class="btn">
             <button type="button" class="btn btn-success btn-s " onclick="placeBuyOrder()">Buy</button>
             <button type="button" class="btn btn-danger btn-s" onclick="placeSellOrder()">Sell</button>
-            <button type="button" class="btn btn-warning btn-s" onclick="">reconnect</button>
+            <!-- <button type="button" class="btn btn-warning btn-s" onclick="createDemoOrder()">orderbot</button>
+            <button type="button" class="btn btn-warning btn-s" onclick="createDemoOrder2()">orderbot</button> -->
             <!-- <button type="button" class="btn btn-warning btn-s" onclick="refreshBuyOrderTable()">refresh buy </button>
             <button type="button" class="btn btn-warning btn-s" onclick="refreshSellOrderTable()">refresh sell</button> -->
         </div>
@@ -146,7 +147,7 @@
     </table>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="http://localhost:3344/socket.io/socket.io.js"></script>
+    <script src="http://192.168.0.248:3344/socket.io/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-migrate-1.4.1.min.js"></script>
 
@@ -173,7 +174,9 @@
             console.log("socket id ", socket.id);
             var checkBuyHash = await getBuyOrderCurrentHash();
             var checkSellHash = await getSellOrderCurrentHash();   
+            console.log("old buyorderhash",buyorderHash);
             console.log("get the current buyorderhash",checkBuyHash);
+            console.log("old sellorderhash",sellorderHash);
             console.log("get the current sellorderhash",checkSellHash);
             if (checkBuyHash != buyorderHash && buyorderHash!="") {
                 refreshBuyOrderTable()
@@ -346,7 +349,7 @@
         // function to get from sql database
         async function fetchBuyOrderData() {
             document.getElementById("buyorder").getElementsByTagName('tbody').innerHTML = ''
-            let response = await fetch("http://localhost:3344/api/buyorder/getbuyorder");
+            let response = await fetch("http://192.168.0.248:3344/api/buyorder/getbuyorder");
             let data = await response.json();
             console.log("==== data 1", data);
             for (var i = 0; i < data.length; i++) {
@@ -370,7 +373,7 @@
         async function postData(data) {
             var t_price = data['qty'] * data['price'];
             var total_price = isFloat(t_price) ? parseFloat(parseFloat(t_price).toFixed(6)) : parseInt(t_price);
-            const response = await fetch("http://localhost:3344/api/buyorder/addbuyorder", {
+            const response = await fetch("http://192.168.0.248:3344/api/buyorder/addbuyorder", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -393,7 +396,7 @@
         }
 
         async function getBuyOrderInsertPosition(data) {
-            const response = await fetch("http://localhost:3344/api/buyorder/insert", {
+            const response = await fetch("http://192.168.0.248:3344/api/buyorder/insert", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -486,7 +489,7 @@
         }
 
         async function fetchSellOrderData() {
-            let response = await fetch("http://localhost:3344/api/sellorder/getsellorder");
+            let response = await fetch("http://192.168.0.248:3344/api/sellorder/getsellorder");
             let data = await response.json();
             for (var i = 0; i < data.length; i++) {
                 var table = document.getElementById("sellorder").getElementsByTagName('tbody')[0];
@@ -509,7 +512,7 @@
         async function postSellOrderData(data) {
             var t_price = data['qty'] * data['price'];
             var total_price = isFloat(t_price) ? parseFloat(parseFloat(t_price).toFixed(6)) : parseInt(t_price);
-            const response = await fetch("http://localhost:3344/api/sellorder/addsellorder", {
+            const response = await fetch("http://192.168.0.248:3344/api/sellorder/addsellorder", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -532,7 +535,7 @@
         }
 
         async function getSellOrderInsertPosition(data) {
-            const response = await fetch("http://localhost:3344/api/sellorder/insert", {
+            const response = await fetch("http://192.168.0.248:3344/api/sellorder/insert", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -552,7 +555,7 @@
         }
 
         async function getUUID() {
-            let response = await fetch("http://localhost:3344/api/ordertable/getUUID");
+            let response = await fetch("http://192.168.0.248:3344/api/ordertable/getUUID");
             let data = await response.json();
             console.log("uuid data ", data['uuid']);
             return data;
@@ -560,7 +563,7 @@
 
 
         async function postOrderTable(data, uuid,ordertype) {
-            const response = await fetch("http://localhost:3344/api/ordertable/addorder", {
+            const response = await fetch("http://192.168.0.248:3344/api/ordertable/addorder", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -589,14 +592,14 @@
         }
 
         async function getBuyOrderCurrentHash() {
-            let response = await fetch("http://localhost:3344/api/ordertable/getbuyordercurrenthash");
+            let response = await fetch("http://192.168.0.248:3344/api/ordertable/getbuyordercurrenthash");
             let data = await response.json();
             console.log(data);
             return data['hash'];
         }
 
         async function getSellOrderCurrentHash() {
-            let response = await fetch("http://localhost:3344/api/ordertable/getsellordercurrenthash");
+            let response = await fetch("http://192.168.0.248:3344/api/ordertable/getsellordercurrenthash");
             let data = await response.json();
             console.log(data);
             return data['hash'];
@@ -609,6 +612,36 @@
                 return v.toString(16);
             });
         } 
+
+        async  function createDemoOrder(){
+            let data = {
+               price:3500,
+               qty:1
+           }  
+           await insertBuyOrder(data); 
+           await insertBuyOrder(data); 
+            data = {
+               price:4000,
+               qty:1
+           } 
+           await insertBuyOrder(data); 
+           await insertBuyOrder(data);   
+       }
+
+       async  function createDemoOrder2(){
+           let data = {
+               price:4000,
+               qty:1
+           }
+             await insertBuyOrder(data); 
+             await insertBuyOrder(data);  
+             data = {
+               price:3500,
+               qty:1
+           }
+             await insertBuyOrder(data); 
+             await insertBuyOrder(data);   
+         }
     </script>
 </body>
 

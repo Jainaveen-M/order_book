@@ -105,12 +105,12 @@
         </table>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="http://localhost:3344/socket.io/socket.io.js"></script>
+    <script src="http://192.168.0.248:3344/socket.io/socket.io.js"></script>
     <script>
         var socket = io()
 
         async function getAllBuyOrder() {
-            const response = await fetch("http://localhost:3344/api/allorder/allbuyorder");
+            const response = await fetch("http://192.168.0.248:3344/api/allorder/allbuyorder");
             let data = await response.json();
             for (var i = 0; i < data.length; i++) {
                 var table = document.getElementById("buyorder").getElementsByTagName('tbody')[0];
@@ -128,7 +128,7 @@
             }
         }
         async function getAllSellOrder() {
-            const response = await fetch("http://localhost:3344/api/allorder/allsellorder");
+            const response = await fetch("http://192.168.0.248:3344/api/allorder/allsellorder");
             let data = await response.json();
             for (var i = 0; i < data.length; i++) {
                 var table = document.getElementById("sellorder").getElementsByTagName('tbody')[0];
@@ -151,7 +151,7 @@
                 //if (confirm('Are you sure to delete this record ? ')) {
             row = td.parentElement.parentElement;
             document.getElementById("buyorder").deleteRow(row.rowIndex);
-            const response = await fetch("http://localhost:3344/api/buyorder/delete", {
+            const response = await fetch("http://192.168.0.248:3344/api/buyorder/delete", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -172,7 +172,7 @@
                 //if (confirm('Are you sure to delete this record ? ')) {
             row = td.parentElement.parentElement;
             document.getElementById("sellorder").deleteRow(row.rowIndex);
-            const response = await fetch("http://localhost:3344/api/sellorder/delete", {
+            const response = await fetch("http://192.168.0.248:3344/api/sellorder/delete", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
